@@ -2,5 +2,5 @@ pandas>=1.5.0
 numpy>=1.23.5
 scikit-learn>=1.2.0
 scikit-llm>=0.2.0
-stromtrooper>=0.2.1
+stormtrooper>=0.2.1
 torch>=2.0.0
