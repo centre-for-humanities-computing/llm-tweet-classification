@@ -69,8 +69,8 @@ def prepare_model(model: str, task: str) -> ClassifierMixin:
 
 
 def find_example_indices(
-    data: pd.DataFrame, task: str, column: str, n_examples_per_class: int = 5
-) -> np.ndarray:
+    data: pd.DataFrame, column: str, n_examples_per_class: int = 5
+) -> pd.Index:
     """Finds N random examples of each label in the data set and
     returns the indices of these."""
     return data.groupby(column).sample(n_examples_per_class).index
@@ -103,7 +103,7 @@ def main():
     classifier = prepare_model(model, task)
 
     print("Fitting model")
-    train_indices = find_example_indices(data, task, column)
+    train_indices = find_example_indices(data, column)
     X = data.raw_text[train_indices]
     y = data[column][train_indices]
     classifier.fit(X, y)
