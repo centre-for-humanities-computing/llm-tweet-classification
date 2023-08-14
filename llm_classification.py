@@ -115,7 +115,8 @@ def main():
     data[f"pred_{column}"] = classifier.predict(data.raw_text)
 
     print("Saving predictions.")
-    out_path = f"predictions/{task}_pred_{column}_{model}.csv"
+    model_file = model.replace("/", "-")
+    out_path = f"predictions/{task}_pred_{column}_{model_file}.csv"
     data.to_csv(out_path)
     print("DONE")
 
