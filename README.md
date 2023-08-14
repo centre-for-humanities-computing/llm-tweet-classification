@@ -26,3 +26,16 @@ You can run the CLI like this:
 ```bash
 python3 llm_classification.py "google/flan-t5-base" "zero-shot" "political" --in_file "labelled_data.csv"
 ```
+
+## Output
+
+This will output a table with predictions added to the `predictions/` folder.
+
+The file name format is as follows:
+```python
+f"predictions/{task}_pred_{column}_{model}.csv"
+```
+
+Each table will have a `pred_political` or `pred_exemplar` column depending on which was used
+and also a `train_test_set` column that is labelled `train` for all examples included in the prompt for few-shot
+learning and `test` everywhere else.
