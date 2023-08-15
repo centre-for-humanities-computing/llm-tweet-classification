@@ -2,20 +2,16 @@
 large language models and transformers."""
 import argparse
 import os
-from functools import partial
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from sklearn.base import ClassifierMixin
 from skllm import FewShotGPTClassifier, ZeroShotGPTClassifier
 from skllm.config import SKLLMConfig
-from stormtrooper import (
-    GenerativeFewShotClassifier,
-    GenerativeZeroShotClassifier,
-    Text2TextFewShotClassifier,
-    Text2TextZeroShotClassifier,
-)
+from stormtrooper import (GenerativeFewShotClassifier,
+                          GenerativeZeroShotClassifier,
+                          Text2TextFewShotClassifier,
+                          Text2TextZeroShotClassifier)
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -24,6 +20,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("task")
     parser.add_argument("outcome_column")
     parser.add_argument("--in_path", default="labelled_data.csv")
+    parser.add_argument("--device", default="cpu")
     return parser
 
 
@@ -35,7 +32,7 @@ def prepare_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def prepare_model(model: str, task: str) -> ClassifierMixin:
+def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
     if model in {"gpt-3.5-turbo", "gpt-4"}:
         print("Initializing connection to OpenAI")
@@ -58,14 +55,14 @@ def prepare_model(model: str, task: str) -> ClassifierMixin:
     # ones we're testing for this project.
     elif "t5" in model.lower():
         if task == "zero-shot":
-            return Text2TextZeroShotClassifier(model)
+            return Text2TextZeroShotClassifier(model, device=device)
         else:
-            return Text2TextFewShotClassifier(model)
+            return Text2TextFewShotClassifier(model, device=device)
     else:
         if task == "zero-shot":
-            return GenerativeZeroShotClassifier(model)
+            return GenerativeZeroShotClassifier(model, device=device)
         else:
-            return GenerativeFewShotClassifier(model)
+            return GenerativeFewShotClassifier(model, device=device)
 
 
 def find_example_indices(
@@ -100,7 +97,7 @@ def main():
     data = prepare_data(data)
 
     print("Loading model")
-    classifier = prepare_model(model, task)
+    classifier = prepare_model(model, task, device=args.device)
 
     print("Fitting model")
     train_indices = find_example_indices(data, column)
