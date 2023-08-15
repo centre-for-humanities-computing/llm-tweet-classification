@@ -5,18 +5,16 @@ import pandas as pd
 from sklearn.metrics import classification_report
 
 
-def get_report(data: pd.DataFrame, column: str):
-    data = data.loc[data['train_test_set'] == "test"]
-    test_report = classification_report(data[column], data[f"pred_{column}"],output_dict=True)
+def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
+    data = data.loc[data["train_test_set"] == "test"]
+    test_report = classification_report(
+        data[column], data[f"pred_{column}"], output_dict=True
+    )
 
-    return test_report
-
-
-def save_report(test_report):
-    df = pd.DataFrame(test_report).transpose()
-    df = df.assign(models = model, tasks = task, columns = column)
+    df = pd.DataFrame(test_report).T
 
     return df
+
 
 def main():
     files = glob("predictions/*_pred*.csv")
@@ -29,13 +27,12 @@ def main():
         task, _, column, model = str(Path(file).stem).split("_")
         print(f"Model: {model}. Task: {task}. Outcome Variable: {column}")
 
-        test_report = get_report(data, column)
-        
-        df = save_report
+        test_report = produce_report(data, column)
+        test_report = df.assign(models=model, tasks=task, columns=column)
 
-        outputs = pd.concat([outputs, df])
+        outputs = pd.concat([outputs, test_report])
 
-    outputs.to_csv('tweet_classification_outputs.csv')
+    outputs.to_csv("tweet_classification_outputs.csv")
 
 
 if __name__ == "__main__":
