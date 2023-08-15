@@ -39,3 +39,11 @@ f"predictions/{task}_pred_{column}_{model}.csv"
 Each table will have a `pred_political` or `pred_exemplar` column depending on which was used
 and also a `train_test_set` column that is labelled `train` for all examples included in the prompt for few-shot
 learning and `test` everywhere else.
+
+## Inference on GPU
+You can specify the device on which you want to run inference. This is by default the CPU, and any Cuda device can be employed.
+Keep in mind that this DOES NOT have any effect when running OpenAI's models as those do not run locally.
+
+```bash
+python3 llm_classification.py "stabilityai/StableBeluga-7B" "few-shot" "exemplar" --device "cuda:0"
+```
