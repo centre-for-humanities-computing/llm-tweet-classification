@@ -4,8 +4,7 @@ from pathlib import Path
 import pandas as pd
 from sklearn.metrics import classification_report
 
-import pprint
-import sys
+from contextlib import redirect_stdout
 
 
 def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -36,9 +35,6 @@ def main():
 
     outputs = pd.DataFrame()
 
-    f = open("output/test.out", "w")
-    sys.stdout = f
-
     for file in files:
         data = pd.read_csv(file)
         task, _, column, model = str(Path(file).stem).split("_")
@@ -50,9 +46,10 @@ def main():
 
         outputs = pd.concat([outputs, test_report])
 
-    f.close()
     outputs.to_csv("output/tweet_classification_outputs.csv")
 
 
 if __name__ == "__main__":
-    main()
+    with open("output/reports.txt", "w") as f:
+        with redirect_stdout(f):
+            main()
