@@ -47,3 +47,20 @@ Keep in mind that this DOES NOT have any effect when running OpenAI's models as 
 ```bash
 python3 llm_classification.py "stabilityai/StableBeluga-7B" "few-shot" "exemplar" --device "cuda:0"
 ```
+## Evaluating results
+To evaluate the performance of the model(s), you can run the `evaluation.py` script as follows.
+```python
+python3 evaluation.py
+```
+It excepts the output file(s) from `llm_classification.py` in the specified file name format and placement. 
+This will output two files to the `output/` folder: 
+- an out-file with the classification report for the test data for each of the files in the `predictions/` folder. 
+- a csv file with the same information as the txt file, but which can be used for plotting the results. 
+
+## Plotting results
+The `plotting.py` script takes the csv-file produced by the evaluation script and makes three plots:
+- acc_figure.png: The accuracy for each of the models in each task (zero-shot and few-shot) with the grey line indicating 50% (chance level) It's split into two, with the left side being the political column and the right being exemplar. 
+- f1_figure.png: The f1-score for positive labels for each model in each task – again split into political and exemplar. 
+- prec_rec_figure.png: Precision plotted against recall for each of the models, split into two rows and two columns. Rows indicate task (zero-shot, few-shot), columns indiciate label column (political, exemplar)
+
+These are all saved in the `figures/` folder. 
