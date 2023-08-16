@@ -5,22 +5,27 @@ import os
 from pathlib import Path
 
 import pandas as pd
+from confection import Config
 from sklearn.base import ClassifierMixin
 from skllm import FewShotGPTClassifier, ZeroShotGPTClassifier
 from skllm.config import SKLLMConfig
-from stormtrooper import (GenerativeFewShotClassifier,
-                          GenerativeZeroShotClassifier,
-                          Text2TextFewShotClassifier,
-                          Text2TextZeroShotClassifier)
+from stormtrooper import (
+    GenerativeFewShotClassifier,
+    GenerativeZeroShotClassifier,
+    Text2TextFewShotClassifier,
+    Text2TextZeroShotClassifier,
+)
 
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classifier")
-    parser.add_argument("model")
-    parser.add_argument("task")
-    parser.add_argument("outcome_column")
+    parser.add_argument("--model", default="google/flan-t5-small")
+    parser.add_argument("--task", default="zero-shot")
+    parser.add_argument("--outcome_column", default="political")
     parser.add_argument("--in_path", default="labelled_data.csv")
+    parser.add_argument("--out_dir", default="predictions")
     parser.add_argument("--device", default="cpu")
+    parser.add_argument("--config", default=None)
     return parser
 
 
@@ -79,6 +84,12 @@ def main():
     task = args.task
     model = args.model
     column = args.outcome_column
+    out_dir = args.out_dir
+    if args.config is not None:
+        config = Config().from_disk(args.config)
+        task = config["inference"]["task"]
+        model = config["inference"]["model"]
+        column = config["inference"]["outcome_column"]
     if task not in {"few-shot", "zero-shot"}:
         raise ValueError(
             f"Task should either be few-shot or zero-shot, recieved {task}"
@@ -90,7 +101,7 @@ def main():
     print(f"{task} classification over {column} with {model}.")
 
     print("Creating output directory.")
-    Path("predictions").mkdir(exist_ok=True)
+    Path(out_dir).mkdir(exist_ok=True)
 
     print("Loading data")
     data = pd.read_csv(args.in_path, index_col=0)
@@ -113,7 +124,7 @@ def main():
 
     print("Saving predictions.")
     model_file = model.replace("/", "-")
-    out_path = f"predictions/{task}_pred_{column}_{model_file}.csv"
+    out_path = Path(out_dir).joinpath(f"{task}_pred_{column}_{model_file}.csv")
     data.to_csv(out_path)
     print("DONE")
 
