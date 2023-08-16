@@ -90,6 +90,7 @@ def main():
         task = config["inference"]["task"]
         model = config["inference"]["model"]
         column = config["inference"]["outcome_column"]
+        device = config["inference"]["device"]
     if task not in {"few-shot", "zero-shot"}:
         raise ValueError(
             f"Task should either be few-shot or zero-shot, recieved {task}"
@@ -108,7 +109,7 @@ def main():
     data = prepare_data(data)
 
     print("Loading model")
-    classifier = prepare_model(model, task, device=args.device)
+    classifier = prepare_model(model, task, device=device)
 
     print("Fitting model")
     train_indices = find_example_indices(data, column)
