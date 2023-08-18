@@ -3,18 +3,18 @@ large language models and transformers."""
 import argparse
 import os
 from pathlib import Path
+from typing import Literal
 
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
 from skllm import FewShotGPTClassifier, ZeroShotGPTClassifier
 from skllm.config import SKLLMConfig
-from stormtrooper import (
-    GenerativeFewShotClassifier,
-    GenerativeZeroShotClassifier,
-    Text2TextFewShotClassifier,
-    Text2TextZeroShotClassifier,
-)
+from stormtrooper import (GenerativeFewShotClassifier,
+                          GenerativeZeroShotClassifier,
+                          Text2TextFewShotClassifier,
+                          Text2TextZeroShotClassifier, ZeroShotClassifier)
+from transformers import AutoConfig
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -37,9 +37,28 @@ def prepare_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def get_model_type(
+    model: str,
+) -> Literal["text2text", "generative", "zeroshot"]:
+    """Determines what type a Huggingface model is.
+    Raises exception if the model is not stormtrooper-compatible."""
+    config = AutoConfig.from_pretrained(model)
+    architectures = config.architectures
+    if any("ForConditionalGeneration" in arc for arc in architectures):
+        return "text2text"
+    elif any("ForCausalLM" in arc for arc in architectures):
+        return "generative"
+    elif any("ForSequenceClassification" in arc for arc in architectures):
+        return "zeroshot"
+    else:
+        raise ValueError(
+            "Provided HuggingFace model is not compatible with stormtrooper."
+        )
+
+
 def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
-    if model in {"gpt-3.5-turbo", "gpt-4"}:
+    if ("gpt-3" in model) or ("gpt-4" in model):
         print("Initializing connection to OpenAI")
         try:
             openai_key = os.environ["OPENAI_KEY"]
@@ -54,20 +73,26 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
             return ZeroShotGPTClassifier(model)
         else:
             return FewShotGPTClassifier(model)
-    # This might not be a good requirement, so if something breaks in
-    # the future, do change it.
-    # Not all seq2seq models have T5 in their name just the
-    # ones we're testing for this project.
-    elif "t5" in model.lower():
-        if task == "zero-shot":
-            return Text2TextZeroShotClassifier(model, device=device)
-        else:
-            return Text2TextFewShotClassifier(model, device=device)
     else:
-        if task == "zero-shot":
-            return GenerativeZeroShotClassifier(model, device=device)
+        # We assume the model is from HuggingFace
+        model_type = get_model_type(model)
+        if model_type == "text2text":
+            if task == "zero-shot":
+                return Text2TextZeroShotClassifier(model, device=device)
+            else:
+                return Text2TextFewShotClassifier(model, device=device)
+        elif model_type == "generative":
+            if task == "zero-shot":
+                return GenerativeZeroShotClassifier(model, device=device)
+            else:
+                return GenerativeFewShotClassifier(model, device=device)
         else:
-            return GenerativeFewShotClassifier(model, device=device)
+            if task == "zero-shot":
+                return ZeroShotClassifier(model, device=device)
+            else:
+                raise ValueError(
+                    "You cannot use a zero shot model with task 'few-shot'."
+                )
 
 
 def find_example_indices(
@@ -85,6 +110,7 @@ def main():
     model = args.model
     column = args.outcome_column
     out_dir = args.out_dir
+    device = args.device
     if args.config is not None:
         config = Config().from_disk(args.config)
         task = config["inference"]["task"]
