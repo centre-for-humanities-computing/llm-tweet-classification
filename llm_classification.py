@@ -19,22 +19,8 @@ from transformers import AutoConfig
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classifier")
-    parser.add_argument("--model", default="google/flan-t5-small")
-    parser.add_argument("--task", default="zero-shot")
-    parser.add_argument("--outcome_column", default="political")
-    parser.add_argument("--in_path", default="labelled_data.csv")
-    parser.add_argument("--out_dir", default="predictions")
-    parser.add_argument("--device", default="cpu")
-    parser.add_argument("--config", default=None)
+    parser.add_argument("config", type=str)
     return parser
-
-
-def prepare_data(data: pd.DataFrame) -> pd.DataFrame:
-    # I'm resetting index so it will just be 0-N
-    data = data.reset_index(drop=True)
-    data.political = data.political.map({0: "apolitical", 1: "political"})
-    data.exemplar = data.exemplar.map({0: "not an exemplar", 1: "exemplar"})
-    return data
 
 
 def get_model_type(
@@ -96,62 +82,80 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
 
 
 def find_example_indices(
-    data: pd.DataFrame, column: str, n_examples_per_class: int = 5
+    data: pd.DataFrame,
+    column: str,
+    n_examples_per_class: int,
+    seed: int,
 ) -> pd.Index:
     """Finds N random examples of each label in the data set and
     returns the indices of these."""
-    return data.groupby(column).sample(n_examples_per_class).index
+    return (
+        data.groupby(column)
+        .sample(n_examples_per_class, random_state=seed)
+        .index
+    )
+
+
+def load_data(in_file: str) -> pd.DataFrame:
+    if in_file.endswith(".tsv"):
+        return pd.read_csv(in_file, sep="\t")
+    elif in_file.endswith(".csv"):
+        return pd.read_csv(in_file)
+    else:
+        raise ValueError("Input file needs to be .csv or .tsv.")
 
 
 def main():
     parser = create_parser()
     args = parser.parse_args()
-    task = args.task
-    model = args.model
-    column = args.outcome_column
-    out_dir = args.out_dir
-    device = args.device
-    if args.config is not None:
-        config = Config().from_disk(args.config)
-        task = config["inference"]["task"]
-        model = config["inference"]["model"]
-        column = config["inference"]["outcome_column"]
-        device = config["inference"]["device"]
+    config = Config().from_disk(args.config)
+    task = config["model"]["task"]
     if task not in {"few-shot", "zero-shot"}:
         raise ValueError(
             f"Task should either be few-shot or zero-shot, recieved {task}"
         )
-    if column not in {"political", "exemplar"}:
-        raise ValueError(
-            f"Column should either be political or exemplar, recieved {column}"
-        )
-    print(f"{task} classification over {column} with {model}.")
+    x_column = config["inference"]["x_column"]
+    y_column = config["inference"]["y_column"]
+    model_name = config["model"]["name"]
+    print(f"{task} classification over {y_column} with {model_name}.")
 
     print("Creating output directory.")
+    out_dir = config["paths"]["out_dir"]
     Path(out_dir).mkdir(exist_ok=True)
 
     print("Loading data")
-    data = pd.read_csv(args.in_path, index_col=0)
-    data = prepare_data(data)
+    data = load_data(config["paths"]["in_file"])
+    data = data.reset_index()
 
-    print("Loading model")
-    classifier = prepare_model(model, task, device=device)
-
-    print("Fitting model")
-    train_indices = find_example_indices(data, column)
-    X = data.raw_text[train_indices]
-    y = data[column][train_indices]
-    classifier.fit(X, y)
+    print("Preparing training data")
+    train_indices = find_example_indices(
+        data,
+        y_column,
+        config["inference"]["n_examples"],
+        seed=config["system"]["seed"],
+    )
     data["train_test_set"] = "test"
     if task == "few-shot":
         data["train_test_set"][train_indices] = "train"
+    X_train = data[x_column][train_indices]
+    y_train = data[y_column][train_indices]
+
+    print("Loading model")
+    classifier = prepare_model(
+        model_name, task, device=config["system"]["device"]
+    )
+
+    print("Fitting model")
+    classifier.fit(X_train, y_train)
 
     print("Inference")
-    data[f"pred_{column}"] = classifier.predict(data.raw_text)
+    data[f"pred_{y_column}"] = classifier.predict(data[x_column])
 
     print("Saving predictions.")
-    model_file = model.replace("/", "-")
-    out_path = Path(out_dir).joinpath(f"{task}_pred_{column}_{model_file}.csv")
+    model_file = model_name.replace("/", "-")
+    out_path = Path(out_dir).joinpath(
+        f"{task}_pred_{y_column}_{model_file}.csv"
+    )
     data.to_csv(out_path)
     print("DONE")
 
