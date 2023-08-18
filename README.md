@@ -47,18 +47,18 @@ You can run the CLI like this:
 python3 llm_classification.py "example_config.cfg"
 ```
 
-### Config Documentation
+#### Config Documentation
 
-#### Paths:
+- Paths:
     - in_file: `str` - Path to input file, either `.csv` or `.tsv`
     - out_dir: `str` - Output directory. The script creates one if not already there.
-#### System:
+- System:
     - seed: `int` - Random seed for selecting few-shot examples. Is ignored when `task=="zero-shot"`
     - device: `str` - Device to run inference on. Change to `cuda:0` if you want to run on GPU.
-#### Model:
+- Model:
     - name: `str` - Name of the model from OpenAI or HuggingFace.
     - task: `{"few-shot", "zero-shot"}` - Indicates whether zero-shot or few-shot inference should be run.
-#### Inference:
+- Inference:
     - x_column: `str` - Name of independent variable in the table.
     - y_column: `str` - Name of dependent variable in the table.
     - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
