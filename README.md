@@ -44,7 +44,7 @@ n_examples=5
 You can run the CLI like this:
 
 ```bash
-python3 llm_classification.py "example_config.cfg"
+python3 llm_classification.py "config.cfg"
 ```
 
 ### Config Documentation
