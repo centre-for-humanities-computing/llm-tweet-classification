@@ -10,9 +10,8 @@ pip install -r requirements.txt
 
 ## Running Classification
 The repo contains a CLI script `llm_classification.py`.
-You have to pass it the name of the model (either from huggingface or OpenAI),
-the task (`few-shot` or `zero-shot`) and the outcome column (`political` or `exemplar`) and
-the input file (optional, if not specified it will load `labelled_data.csv`)
+You can use it for running arbitrary classification tasks in `.tsv` or `.csv` files with Large Language models from either
+HuggingFace or OpenAI.
 
 If you intend to use OpenAI models, you will have to specify your API key and ORG as environment variables.
 
@@ -21,32 +20,61 @@ export OPENAI_KEY="..."
 export OPENAI_ORG="..."
 ```
 
+The script has one command-line argument, namely a config file of the following format:
+
+```
+[paths]
+in_file="labelled_data.csv"
+out_dir="predictions/"
+
+[system]
+seed=0
+device="cpu"
+
+[model]
+name="google/flan-t5-base"
+task="few-shot"
+
+[inference]
+x_column="raw_text"
+y_column="exemplar"
+n_examples=5
+```
+
 You can run the CLI like this:
 
 ```bash
-python3 llm_classification.py "google/flan-t5-base" "zero-shot" "political" --in_file "labelled_data.csv"
+python3 llm_classification.py "example_config.cfg"
 ```
+
+### Config Documentation
+
+#### Paths:
+    - in_file: `str` - Path to input file, either `.csv` or `.tsv`
+    - out_dir: `str` - Output directory. The script creates one if not already there.
+#### System:
+    - seed: `int` - Random seed for selecting few-shot examples. Is ignored when `task=="zero-shot"`
+    - device: `str` - Device to run inference on. Change to `cuda:0` if you want to run on GPU.
+#### Model:
+    - name: `str` - Name of the model from OpenAI or HuggingFace.
+    - task: `{"few-shot", "zero-shot"}` - Indicates whether zero-shot or few-shot inference should be run.
+#### Inference:
+    - x_column: `str` - Name of independent variable in the table.
+    - y_column: `str` - Name of dependent variable in the table.
+    - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
 
 ## Output
 
-This will output a table with predictions added to the `predictions/` folder.
+This will output a table with predictions added to the `out_dir` folder in the config.
 
 The file name format is as follows:
 ```python
 f"predictions/{task}_pred_{column}_{model}.csv"
 ```
 
-Each table will have a `pred_political` or `pred_exemplar` column depending on which was used
-and also a `train_test_set` column that is labelled `train` for all examples included in the prompt for few-shot
+Each table will have a `pred_<y_column>` and also a `train_test_set` column that is labelled `train` for all examples included in the prompt for few-shot
 learning and `test` everywhere else.
 
-## Inference on GPU
-You can specify the device on which you want to run inference. This is by default the CPU, and any Cuda device can be employed.
-Keep in mind that this DOES NOT have any effect when running OpenAI's models as those do not run locally.
-
-```bash
-python3 llm_classification.py "stabilityai/StableBeluga-7B" "few-shot" "exemplar" --device "cuda:0"
-```
 ## Evaluating results
 To evaluate the performance of the model(s), you can run the `evaluation.py` script as follows.
 ```python
