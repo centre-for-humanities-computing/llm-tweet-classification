@@ -8,7 +8,7 @@ Install all requirements for the LLM classification script.
 pip install -r requirements.txt
 ```
 
-## Running Classification
+## Inference
 The repo contains a CLI script `llm_classification.py`.
 You can use it for running arbitrary classification tasks in `.tsv` or `.csv` files with Large Language models from either
 HuggingFace or OpenAI.
@@ -47,8 +47,7 @@ You can run the CLI like this:
 python3 llm_classification.py "example_config.cfg"
 ```
 
-#### Config Documentation
-
+### Config Documentation
 - Paths:
     - in_file: `str` - Path to input file, either `.csv` or `.tsv`
     - out_dir: `str` - Output directory. The script creates one if not already there.
@@ -62,6 +61,9 @@ python3 llm_classification.py "example_config.cfg"
     - x_column: `str` - Name of independent variable in the table.
     - y_column: `str` - Name of dependent variable in the table.
     - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
+
+### Containerized Inference
+TODO: We have to finalize inference in Docker and write docs for it.
 
 ## Output
 
