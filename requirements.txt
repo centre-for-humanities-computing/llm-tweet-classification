@@ -8,3 +8,4 @@ stormtrooper>=0.3.2
 torch>=2.0.0
 confection>=0.1.0
 transformers>=4.25.0
+setfit>=0.7.0
