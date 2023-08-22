@@ -10,10 +10,15 @@ from confection import Config
 from sklearn.base import ClassifierMixin
 from skllm import FewShotGPTClassifier, ZeroShotGPTClassifier
 from skllm.config import SKLLMConfig
-from stormtrooper import (GenerativeFewShotClassifier,
-                          GenerativeZeroShotClassifier,
-                          Text2TextFewShotClassifier,
-                          Text2TextZeroShotClassifier, ZeroShotClassifier)
+from stormtrooper import (
+    GenerativeFewShotClassifier,
+    GenerativeZeroShotClassifier,
+    SetFitFewShotClassifier,
+    SetFitZeroShotClassifier,
+    Text2TextFewShotClassifier,
+    Text2TextZeroShotClassifier,
+    ZeroShotClassifier,
+)
 from transformers import AutoConfig
 
 
@@ -25,7 +30,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 def get_model_type(
     model: str,
-) -> Literal["text2text", "generative", "zeroshot"]:
+) -> Literal["text2text", "generative", "zeroshot", "sentence-trf"]:
     """Determines what type a Huggingface model is.
     Raises exception if the model is not stormtrooper-compatible."""
     config = AutoConfig.from_pretrained(model)
@@ -36,6 +41,8 @@ def get_model_type(
         return "generative"
     elif any("ForSequenceClassification" in arc for arc in architectures):
         return "zeroshot"
+    elif any("BertModel" in arc for arc in architectures):
+        return "sentence-trf"
     else:
         raise ValueError(
             "Provided HuggingFace model is not compatible with stormtrooper."
@@ -72,6 +79,11 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
                 return GenerativeZeroShotClassifier(model, device=device)
             else:
                 return GenerativeFewShotClassifier(model, device=device)
+        elif model_type == "sentence-trf":
+            if task == "zero-shot":
+                return SetFitZeroShotClassifier(model, device=device)
+            else:
+                return SetFitFewShotClassifier(model, device=device)
         else:
             if task == "zero-shot":
                 return ZeroShotClassifier(model, device=device)
