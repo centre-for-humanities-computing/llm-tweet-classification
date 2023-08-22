@@ -28,7 +28,6 @@ def print_report(data: pd.DataFrame, column: str) -> None:
 
 
 def main():
-    Path("output").mkdir(exist_ok=True)
 
     files = glob("predictions/*_pred*.csv")
     files = [file for file in files if "only-political" not in file]
@@ -50,6 +49,7 @@ def main():
 
 
 if __name__ == "__main__":
+    Path("output").mkdir(exist_ok=True)
     with open("output/reports.txt", "w") as f:
         with redirect_stdout(f):
             main()
