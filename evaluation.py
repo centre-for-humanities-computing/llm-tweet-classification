@@ -9,8 +9,8 @@ from contextlib import redirect_stdout
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Evaluation")
-    parser.add_argument("data_folder", type=str)
-
+    parser.add_argument("data_folder", type=str, default="predictions/")
+    parser.add_argument("--output_folder", type=str, default="output/")
     return parser
 
 def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -18,16 +18,13 @@ def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
     test_report = classification_report(
         data[column], data[f"pred_{column}"], output_dict=True
     )
-
     df = pd.DataFrame(test_report).T
-
     return df
 
 
 def print_report(data: pd.DataFrame, column: str) -> None:
     data = data.loc[data["train_test_set"] == "test"]
     report = classification_report(data[column], data[f"pred_{column}"])
-
     report_width = len(report.split("\n")[0])
     print("".center(report_width, "-"))
     print(report, "\n")
@@ -36,15 +33,21 @@ def print_report(data: pd.DataFrame, column: str) -> None:
 def main():
     parser = create_parser()
     args = parser.parse_args()
+    in_dir = Path(args.data_folder)
+    out_dir = Path(args.output_folder)
 
-    files = glob(f"{args.data_folder}/*_pred*.csv")
+    # Collecting prediction files from given directory
+    files = glob(str(in_dir.joinpath("*_pred*.csv")))
     files = [file for file in files if "only-political" not in file]
 
-    outputs = pd.DataFrame()
+    # Creating output directory if it does not exist.
+    out_dir.mkdir(exist_ok=True)
+    # Getting last part of the path to use as name of the file.
+    output_name = Path(in_dir).name
 
-    Path("output").mkdir(exist_ok=True)
-    with open(f"output/{args.data_folder}_reports.txt", "w") as f:
-        with redirect_stdout(f):
+    outputs = pd.DataFrame()
+    with open(out_dir.joinpath(f"{output_name}_reports.txt"), "w") as buffer:
+        with redirect_stdout(buffer):
 
             for file in files:
                 data = pd.read_csv(file)
@@ -57,7 +60,9 @@ def main():
 
                 outputs = pd.concat([outputs, test_report])
 
-    outputs.to_csv(f"output/{args.data_folder}_outputs.csv")
+
+    out_file = out_dir.joinpath(f"{output_name}_outputs.csv")
+    outputs.to_csv(out_file)
 
 
 if __name__ == "__main__":
