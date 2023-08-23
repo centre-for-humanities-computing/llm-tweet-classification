@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 import seaborn as sns
 import numpy as np
@@ -17,6 +18,12 @@ from plotnine import (
     theme,
 )
 
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="LLM Classification Plotting")
+    parser.add_argument("-df", "--data_folder", type=str)
+    parser.add_argument("-o", "--options", nargs = '+', default = [])
+
+    return parser
 
 def shorten_modelnames(models: list) -> list:
     short_names = []
@@ -31,6 +38,12 @@ def shorten_modelnames(models: list) -> list:
         elif "Llama" in i:
             name = re.search(r"(Llama.*b)", i).group(1)
             short_names.append(name.lower())
+        elif "BAAI" in i:
+            name = re.search(r"(bge.*)-en", i).group(1)
+            short_names.append(name)
+        elif "Mini" in i:
+            name = re.search(r"(all.*)-v2", i).group(1)
+            short_names.append(name.lower())
         else:
             short_names.append(i)
 
@@ -40,8 +53,15 @@ def shorten_modelnames(models: list) -> list:
 def clean_dataframe(df: pd.DataFrame()) -> pd.DataFrame:
     df = df.rename(columns={"Unnamed: 0": "label"})
 
-    model_order = np.sort(df["models"].unique())
-    short_names = shorten_modelnames(model_order)
+    model_order = ["sentence-transformers-all-MiniLM-L6-v2",
+                    "BAAI-bge-large-en",
+                    "google-flan-t5-xxl",
+                    "stabilityai-StableBeluga-13B",
+                    "gpt-3.5-turbo",
+                    "gpt-4"]
+
+    short_names = ["all-minilm-l6", "bge-large", "t5-xxl", "beluga-13b", "gpt-3.5-turbo", "gpt4"]
+    #short_names = shorten_modelnames(model_order)
 
     df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
     df["models"] = df["models"].cat.rename_categories(short_names)
@@ -49,8 +69,7 @@ def clean_dataframe(df: pd.DataFrame()) -> pd.DataFrame:
     return df
 
 
-def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
-    options = ["political", "exemplar"]
+def make_f1_fig(df: pd.DataFrame, options: list) -> sns.axisgrid.FacetGrid:
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
 
@@ -87,8 +106,7 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
     return acc_fig
 
 
-def make_prec_rec_fig(df: pd.DataFrame):
-    options = ["political", "exemplar"]
+def make_prec_rec_fig(df: pd.DataFrame, options: list):
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
 
@@ -108,16 +126,19 @@ def make_prec_rec_fig(df: pd.DataFrame):
 
 
 def main():
-    df = pd.read_csv("output/tweet_classification_outputs.csv")
-    Path("figures").mkdir(exist_ok=True)
+    parser = create_parser()
+    args = parser.parse_args()
+
+    df = pd.read_csv(f"output/{args.data_folder}_outputs.csv")
+    Path(f"{args.data_folder}_figures").mkdir(exist_ok=True)
 
     df = clean_dataframe(df)
 
-    f1_figure = make_f1_fig(df)
+    f1_figure = make_f1_fig(df, args.options)
     acc_figure = make_acc_fig(df)
-    prec_rec_figure = make_prec_rec_fig(df)
+    prec_rec_figure = make_prec_rec_fig(df, args.options)
 
-    out_path = "figures/"
+    out_path = f"{args.data_folder}_figures/"
 
     f1_figure.savefig(f"{out_path}f1_figure.png")
     acc_figure.savefig(f"{out_path}acc_figure.png")

@@ -1,3 +1,4 @@
+import argparse 
 from glob import glob
 from pathlib import Path
 
@@ -6,6 +7,11 @@ from sklearn.metrics import classification_report
 
 from contextlib import redirect_stdout
 
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="LLM Classification Evaluation")
+    parser.add_argument("data_folder", type=str)
+
+    return parser
 
 def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
     data = data.loc[data["train_test_set"] == "test"]
@@ -28,28 +34,31 @@ def print_report(data: pd.DataFrame, column: str) -> None:
 
 
 def main():
+    parser = create_parser()
+    args = parser.parse_args()
 
-    files = glob("predictions/*_pred*.csv")
+    files = glob(f"{args.data_folder}/*_pred*.csv")
     files = [file for file in files if "only-political" not in file]
 
     outputs = pd.DataFrame()
 
-    for file in files:
-        data = pd.read_csv(file)
-        task, _, column, model = str(Path(file).stem).split("_")
-        print(f"Model: {model}. Task: {task}. Outcome Variable: {column}")
+    Path("output").mkdir(exist_ok=True)
+    with open(f"output/{args.data_folder}_reports.txt", "w") as f:
+        with redirect_stdout(f):
 
-        print_report(data, column)
-        df = produce_report(data, column)
-        test_report = df.assign(models=model, tasks=task, columns=column)
+            for file in files:
+                data = pd.read_csv(file)
+                task, _, column, model = str(Path(file).stem).split("_")
+                print(f"Model: {model}. Task: {task}. Outcome Variable: {column}")
 
-        outputs = pd.concat([outputs, test_report])
+                print_report(data, column)
+                df = produce_report(data, column)
+                test_report = df.assign(models=model, tasks=task, columns=column)
 
-    outputs.to_csv("output/tweet_classification_outputs.csv")
+                outputs = pd.concat([outputs, test_report])
+
+    outputs.to_csv(f"output/{args.data_folder}_outputs.csv")
 
 
 if __name__ == "__main__":
-    Path("output").mkdir(exist_ok=True)
-    with open("output/reports.txt", "w") as f:
-        with redirect_stdout(f):
-            main()
+    main()
