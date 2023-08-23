@@ -20,37 +20,12 @@ from plotnine import (
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Plotting")
-    parser.add_argument("-df", "--data_folder", type=str)
-    parser.add_argument("-o", "--options", nargs = '+', default = [])
+    parser.add_argument("-df", "--data_folder", type=str, default="predictions/") 
 
     return parser
 
-def shorten_modelnames(models: list) -> list:
-    short_names = []
 
-    for i in models:
-        if "t5" in i:
-            name = re.search(r"(t5.*)", i).group(1)
-            short_names.append(name)
-        elif "Beluga" in i:
-            name = re.search(r"(Beluga.*)", i).group(1)
-            short_names.append(name.lower())
-        elif "Llama" in i:
-            name = re.search(r"(Llama.*b)", i).group(1)
-            short_names.append(name.lower())
-        elif "BAAI" in i:
-            name = re.search(r"(bge.*)-en", i).group(1)
-            short_names.append(name)
-        elif "Mini" in i:
-            name = re.search(r"(all.*)-v2", i).group(1)
-            short_names.append(name.lower())
-        else:
-            short_names.append(i)
-
-    return short_names
-
-
-def clean_dataframe(df: pd.DataFrame()) -> pd.DataFrame:
+def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.rename(columns={"Unnamed: 0": "label"})
 
     model_order = ["sentence-transformers-all-MiniLM-L6-v2",
@@ -69,8 +44,11 @@ def clean_dataframe(df: pd.DataFrame()) -> pd.DataFrame:
     return df
 
 
-def make_f1_fig(df: pd.DataFrame, options: list) -> sns.axisgrid.FacetGrid:
+def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
+    options = ["political", "exemplar"]
+
     # selecting rows based on condition
+    
     subset = df[df["label"].isin(options)]
 
     f1_fig = sns.relplot(
@@ -106,7 +84,8 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
     return acc_fig
 
 
-def make_prec_rec_fig(df: pd.DataFrame, options: list):
+def make_prec_rec_fig(df: pd.DataFrame):
+    options = ["political", "exemplar"]
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
 
@@ -129,16 +108,19 @@ def main():
     parser = create_parser()
     args = parser.parse_args()
 
-    df = pd.read_csv(f"output/{args.data_folder}_outputs.csv")
-    Path(f"{args.data_folder}_figures").mkdir(exist_ok=True)
+    data_name = Path(args.data_folder).name
+    df = pd.read_csv(f"output/{data_name}_outputs.csv")
+    
 
     df = clean_dataframe(df)
 
-    f1_figure = make_f1_fig(df, args.options)
+    f1_figure = make_f1_fig(df)
     acc_figure = make_acc_fig(df)
-    prec_rec_figure = make_prec_rec_fig(df, args.options)
+    prec_rec_figure = make_prec_rec_fig(df)
+    
+    Path(f"{data_name}_figures").mkdir(exist_ok=True)
 
-    out_path = f"{args.data_folder}_figures/"
+    out_path = f"{data_name}_figures/"
 
     f1_figure.savefig(f"{out_path}f1_figure.png")
     acc_figure.savefig(f"{out_path}acc_figure.png")
