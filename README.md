@@ -96,13 +96,14 @@ Each table will have a `pred_<y_column>` and also a `train_test_set` column that
 learning and `test` everywhere else.
 
 ## Evaluating results
-To evaluate the performance of the model(s), you can run the `evaluation.py` script as follows.
+To evaluate the performance of the model(s), you can run the CLI `evaluation.py` script. It has two command line arguments: --data_folder and --output_folder. These, respectively, refer to the folder in which the predictions from the llm_classification.py script has been saved, and the folder where the classification report(s) should be saved. 
+It can be run as follows:
 ```python
-python3 evaluation.py
+python3 evaluation.py -df "your/data/path" -of "your/out/path"
 ```
-It excepts the output file(s) from `llm_classification.py` in the specified file name format and placement. 
-This will output two files to the `output/` folder: 
-- an out-file with the classification report for the test data for each of the files in the `predictions/` folder. 
+It expects the output file(s) from `llm_classification.py` in the specified file name format and placement. 
+It will output two files to the specified out folder: 
+- a txt file with the classification report for the test data for each of the files in the `predictions/` folder. 
 - a csv file with the same information as the txt file, but which can be used for plotting the results. 
 
 ## Plotting results
@@ -111,4 +112,10 @@ The `plotting.py` script takes the csv-file produced by the evaluation script an
 - f1_figure.png: The f1-score for positive labels for each model in each task – again split into political and exemplar. 
 - prec_rec_figure.png: Precision plotted against recall for each of the models, split into two rows and two columns. Rows indicate task (zero-shot, few-shot), columns indiciate label column (political, exemplar)
 
-These are all saved in the `figures/` folder. 
+It has a single command line argument: --data_folder. This should be the same as the one specified when running the evaluation.py script. Examples: 
+```python
+python3 plotting.py -df "your/data/path"  
+```
+
+
+These are all saved in a new figures folder which adds #_figures# to the final data_folders name. 

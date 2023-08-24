@@ -63,7 +63,7 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
         SKLLMConfig.set_openai_key(openai_key)
         SKLLMConfig.set_openai_org(openai_org)
         if task == "zero-shot":
-            return ZeroShotGPTClassifier(model)
+            return ZeroShotGPTClassifier(openai_model=model)
         else:
             return FewShotGPTClassifier(openai_model=model)
     else:
