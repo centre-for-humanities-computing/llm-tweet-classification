@@ -65,7 +65,7 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
         if task == "zero-shot":
             return ZeroShotGPTClassifier(model)
         else:
-            return FewShotGPTClassifier(model)
+            return FewShotGPTClassifier(openai_model=model)
     else:
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)
