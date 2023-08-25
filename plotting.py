@@ -18,9 +18,10 @@ from plotnine import (
     theme,
 )
 
+
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Plotting")
-    parser.add_argument("-df", "--data_folder", type=str, default="predictions/") 
+    parser.add_argument("-df", "--data_folder", type=str, default="predictions/")
 
     return parser
 
@@ -28,15 +29,24 @@ def create_parser() -> argparse.ArgumentParser:
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.rename(columns={"Unnamed: 0": "label"})
 
-    model_order = ["sentence-transformers-all-MiniLM-L6-v2",
-                    "BAAI-bge-large-en",
-                    "google-flan-t5-xxl",
-                    "stabilityai-StableBeluga-13B",
-                    "gpt-3.5-turbo",
-                    "gpt-4"]
+    model_order = [
+        "sentence-transformers-all-MiniLM-L6-v2",
+        "BAAI-bge-large-en",
+        "google-flan-t5-xxl",
+        "stabilityai-StableBeluga-13B",
+        "gpt-3.5-turbo",
+        "gpt-4",
+    ]
 
-    short_names = ["all-minilm-l6", "bge-large", "t5-xxl", "beluga-13b", "gpt-3.5-turbo", "gpt4"]
-    #short_names = shorten_modelnames(model_order)
+    short_names = [
+        "all-minilm-l6",
+        "bge-large",
+        "t5-xxl",
+        "beluga-13b",
+        "gpt-3.5-turbo",
+        "gpt4",
+    ]
+    # short_names = shorten_modelnames(model_order)
 
     df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
     df["models"] = df["models"].cat.rename_categories(short_names)
@@ -45,10 +55,10 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
-    options = ["political", "exemplar"]
+    options = ["political"]
 
     # selecting rows based on condition
-    
+
     subset = df[df["label"].isin(options)]
 
     f1_fig = sns.relplot(
@@ -56,7 +66,7 @@ def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
         x="models",
         y="f1-score",
         hue="tasks",
-        col="columns",
+        # col="columns",
         kind="line",
     )
     f1_fig.set_xticklabels(rotation=10)
@@ -68,13 +78,14 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
     options = ["accuracy"]
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
+    subset = subset.loc[subset["columns"] == "political"]
 
     acc_fig = sns.relplot(
         data=subset,
         x="models",
         y="support",
         hue="tasks",
-        col="columns",
+        # col="columns",
         kind="line",
     )
     acc_fig = (
@@ -85,7 +96,7 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
 
 
 def make_prec_rec_fig(df: pd.DataFrame):
-    options = ["political", "exemplar"]
+    options = ["political"]
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
 
@@ -93,7 +104,7 @@ def make_prec_rec_fig(df: pd.DataFrame):
         ggplot(subset, aes("precision", "recall", color="models"))
         + geom_point()
         + geom_text(aes(label="models"), size=8, nudge_y=0.04)
-        + facet_grid("tasks~columns")
+        + facet_grid("~tasks")
         + theme_bw()
         + scale_x_continuous(limits=[0, 1])
         + scale_y_continuous(limits=[0, 1])
@@ -110,14 +121,13 @@ def main():
 
     data_name = Path(args.data_folder).name
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
-    
 
     df = clean_dataframe(df)
 
     f1_figure = make_f1_fig(df)
     acc_figure = make_acc_fig(df)
     prec_rec_figure = make_prec_rec_fig(df)
-    
+
     Path(f"{data_name}_figures").mkdir(exist_ok=True)
 
     out_path = f"{data_name}_figures/"
