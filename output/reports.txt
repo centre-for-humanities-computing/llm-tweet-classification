@@ -1,0 +1,240 @@
+Model: google-flan-t5-xxl. Task: few-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.25      0.76      0.38       767
+not an exemplar       0.69      0.19      0.30      2123
+
+       accuracy                           0.34      2890
+      macro avg       0.47      0.48      0.34      2890
+   weighted avg       0.57      0.34      0.32      2890
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.26      0.92      0.41       772
+not an exemplar       0.68      0.07      0.12      2128
+
+       accuracy                           0.29      2900
+      macro avg       0.47      0.49      0.26      2900
+   weighted avg       0.57      0.29      0.20      2900
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.90      0.53      0.67      1450
+   political       0.67      0.94      0.78      1450
+
+    accuracy                           0.73      2900
+   macro avg       0.78      0.73      0.72      2900
+weighted avg       0.78      0.73      0.72      2900
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: few-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.38      0.67      0.49       767
+not an exemplar       0.84      0.61      0.71      2123
+
+       accuracy                           0.63      2890
+      macro avg       0.61      0.64      0.60      2890
+   weighted avg       0.72      0.63      0.65      2890
+ 
+
+Model: gpt-3.5-turbo. Task: zero-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.43      0.02      0.04       772
+not an exemplar       0.74      0.99      0.84      2128
+
+       accuracy                           0.73      2900
+      macro avg       0.58      0.51      0.44      2900
+   weighted avg       0.65      0.73      0.63      2900
+ 
+
+Model: BAAI-bge-large-en. Task: few-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.38      0.44      0.41       767
+not an exemplar       0.79      0.74      0.76      2123
+
+       accuracy                           0.66      2890
+      macro avg       0.58      0.59      0.59      2890
+   weighted avg       0.68      0.66      0.67      2890
+ 
+
+Model: BAAI-bge-large-en. Task: few-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.67      0.94      0.78      1445
+   political       0.90      0.53      0.67      1445
+
+    accuracy                           0.74      2890
+   macro avg       0.78      0.74      0.73      2890
+weighted avg       0.78      0.74      0.73      2890
+ 
+
+Model: gpt-4. Task: few-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.36      0.65      0.46       155
+not an exemplar       0.82      0.58      0.68       425
+
+       accuracy                           0.60       580
+      macro avg       0.59      0.61      0.57       580
+   weighted avg       0.70      0.60      0.62       580
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.70      0.13      0.23      1450
+   political       0.52      0.94      0.67      1450
+
+    accuracy                           0.54      2900
+   macro avg       0.61      0.54      0.45      2900
+weighted avg       0.61      0.54      0.45      2900
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.26      0.75      0.39       772
+not an exemplar       0.73      0.24      0.36      2128
+
+       accuracy                           0.38      2900
+      macro avg       0.50      0.50      0.38      2900
+   weighted avg       0.60      0.38      0.37      2900
+ 
+
+Model: gpt-4. Task: zero-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.22      0.08      0.12       772
+not an exemplar       0.73      0.90      0.80      2128
+
+       accuracy                           0.68      2900
+      macro avg       0.47      0.49      0.46      2900
+   weighted avg       0.59      0.68      0.62      2900
+ 
+
+Model: gpt-3.5-turbo. Task: few-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.83      0.84      0.84       301
+   political       0.83      0.81      0.82       279
+
+    accuracy                           0.83       580
+   macro avg       0.83      0.83      0.83       580
+weighted avg       0.83      0.83      0.83       580
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: few-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.70      0.58      0.64      1445
+   political       0.64      0.76      0.69      1445
+
+    accuracy                           0.67      2890
+   macro avg       0.67      0.67      0.66      2890
+weighted avg       0.67      0.67      0.66      2890
+ 
+
+Model: gpt-3.5-turbo. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.82      0.69      0.75      1450
+   political       0.73      0.85      0.79      1450
+
+    accuracy                           0.77      2900
+   macro avg       0.78      0.77      0.77      2900
+weighted avg       0.78      0.77      0.77      2900
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.81      0.77      0.79      1450
+   political       0.78      0.82      0.80      1450
+
+    accuracy                           0.79      2900
+   macro avg       0.79      0.79      0.79      2900
+weighted avg       0.79      0.79      0.79      2900
+ 
+
+Model: gpt-4. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.86      0.71      0.78      1450
+   political       0.75      0.89      0.81      1450
+
+    accuracy                           0.80      2900
+   macro avg       0.81      0.80      0.80      2900
+weighted avg       0.81      0.80      0.80      2900
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.26      0.80      0.39       772
+not an exemplar       0.72      0.19      0.29      2128
+
+       accuracy                           0.35      2900
+      macro avg       0.49      0.49      0.34      2900
+   weighted avg       0.60      0.35      0.32      2900
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: few-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.76      0.82      0.78      1445
+   political       0.80      0.74      0.77      1445
+
+    accuracy                           0.78      2890
+   macro avg       0.78      0.78      0.78      2890
+weighted avg       0.78      0.78      0.78      2890
+ 
+
+Model: gpt-3.5-turbo. Task: few-shot. Outcome Variable: exemplar
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+       exemplar       0.30      0.34      0.32       132
+not an exemplar       0.80      0.77      0.78       448
+
+       accuracy                           0.67       580
+      macro avg       0.55      0.55      0.55       580
+   weighted avg       0.68      0.67      0.68       580
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: political
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  apolitical       0.70      0.58      0.64      1450
+   political       0.64      0.75      0.69      1450
+
+    accuracy                           0.67      2900
+   macro avg       0.67      0.67      0.66      2900
+weighted avg       0.67      0.67      0.66      2900
+ 
+

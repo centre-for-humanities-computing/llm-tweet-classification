@@ -1,0 +1,165 @@
+,precision,recall,f1-score,support,models,tasks,columns
+general complaint,0.525,0.22340425531914893,0.3134328358208955,94.0,stabilityai-StableBeluga-13B,zero-shot,topic
+personal complaint,0.13157894736842105,0.3125,0.18518518518518517,16.0,stabilityai-StableBeluga-13B,zero-shot,topic
+platform policies,0.411214953271028,0.8627450980392157,0.5569620253164557,51.0,stabilityai-StableBeluga-13B,zero-shot,topic
+section 230,0.9764309764309764,0.9539473684210527,0.9650582362728786,304.0,stabilityai-StableBeluga-13B,zero-shot,topic
+trump ban,0.9219858156028369,0.7926829268292683,0.8524590163934427,164.0,stabilityai-StableBeluga-13B,zero-shot,topic
+twitter support,0.25,0.5,0.3333333333333333,6.0,stabilityai-StableBeluga-13B,zero-shot,topic
+accuracy,0.7763779527559055,0.7763779527559055,0.7763779527559055,0.7763779527559055,stabilityai-StableBeluga-13B,zero-shot,topic
+macro avg,0.5360351154455437,0.6075466081014476,0.5344051053870319,635.0,stabilityai-StableBeluga-13B,zero-shot,topic
+weighted avg,0.8219967186907076,0.7763779527559055,0.7811207800578678,635.0,stabilityai-StableBeluga-13B,zero-shot,topic
+Both,0.0,0.0,0.0,17.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+Neither,0.9230769230769231,0.02622950819672131,0.05100956429330499,915.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+Problem,0.2791411042944785,0.8956692913385826,0.4256314312441534,508.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+Solution,0.1799163179916318,0.09409190371991247,0.12356321839080459,457.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+accuracy,0.27517132314180287,0.27517132314180287,0.27517132314180287,0.27517132314180287,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+macro avg,0.34553358634075837,0.2539976758138041,0.15005105348206577,1897.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+weighted avg,0.5633320099731973,0.27517132314180287,0.16835155993937884,1897.0,stabilityai-StableBeluga-13B,zero-shot,problemsolution
+Negative Stance,0.3333333333333333,0.018518518518518517,0.03508771929824561,216.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+Neutral Stance,0.45265151515151514,0.7353846153846154,0.5603751465416178,325.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+No Stance,0.20863309352517986,0.21323529411764705,0.2109090909090909,136.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+Positive Stance,0.03125,0.029411764705882353,0.030303030303030304,34.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+accuracy,0.38396624472573837,0.38396624472573837,0.38396624472573837,0.38396624472573837,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+macro avg,0.25646698550250707,0.24913754818166584,0.20916874676299615,711.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+weighted avg,0.34957572875339926,0.38396624472573837,0.3086002944984335,711.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,stance
+Negative Stance,0.366412213740458,0.4444444444444444,0.401673640167364,216.0,BAAI-bge-large-en,zero-shot,stance
+Neutral Stance,0.5652173913043478,0.16,0.24940047961630693,325.0,BAAI-bge-large-en,zero-shot,stance
+No Stance,0.16487455197132617,0.3382352941176471,0.2216867469879518,136.0,BAAI-bge-large-en,zero-shot,stance
+Positive Stance,0.038461538461538464,0.08823529411764706,0.05357142857142858,34.0,BAAI-bge-large-en,zero-shot,stance
+accuracy,0.2770745428973277,0.2770745428973277,0.2770745428973277,0.2770745428973277,BAAI-bge-large-en,zero-shot,stance
+macro avg,0.28374142386941764,0.2577287581699346,0.23158307383576282,711.0,BAAI-bge-large-en,zero-shot,stance
+weighted avg,0.40305389833705296,0.2770745428973277,0.28099506091876286,711.0,BAAI-bge-large-en,zero-shot,stance
+constitutionality and jurisprudency,0.1,0.05,0.06666666666666667,20.0,BAAI-bge-large-en,zero-shot,frame
+economic,0.0,0.0,0.0,2.0,BAAI-bge-large-en,zero-shot,frame
+external regulation and reputation,0.0,0.0,0.0,1.0,BAAI-bge-large-en,zero-shot,frame
+fairness and equality,0.3076923076923077,0.10256410256410256,0.15384615384615385,39.0,BAAI-bge-large-en,zero-shot,frame
+"law and order, crime and justice frames",0.0,0.0,0.0,12.0,BAAI-bge-large-en,zero-shot,frame
+morality,0.09090909090909091,0.3333333333333333,0.14285714285714288,6.0,BAAI-bge-large-en,zero-shot,frame
+other,0.0,0.0,0.0,4.0,BAAI-bge-large-en,zero-shot,frame
+policy prescription and evaluation,1.0,0.014018691588785047,0.027649769585253458,214.0,BAAI-bge-large-en,zero-shot,frame
+political,0.1267605633802817,0.45,0.1978021978021978,20.0,BAAI-bge-large-en,zero-shot,frame
+security and defense frames,0.04,0.25,0.06896551724137932,4.0,BAAI-bge-large-en,zero-shot,frame
+accuracy,0.062111801242236024,0.062111801242236024,0.062111801242236024,0.062111801242236024,BAAI-bge-large-en,zero-shot,frame
+macro avg,0.166536196198168,0.11999161274862209,0.0657787447998794,322.0,BAAI-bge-large-en,zero-shot,frame
+weighted avg,0.7181387137051558,0.062111801242236024,0.05695476057990653,322.0,BAAI-bge-large-en,zero-shot,frame
+Both,0.0,0.0,0.0,17.0,google-flan-t5-xxl,zero-shot,problemsolution
+Neither,0.7454545454545455,0.17923497267759564,0.28898678414096923,915.0,google-flan-t5-xxl,zero-shot,problemsolution
+Problem,0.33573717948717946,0.8248031496062992,0.4772209567198178,508.0,google-flan-t5-xxl,zero-shot,problemsolution
+Solution,0.4415954415954416,0.33916849015317285,0.38366336633663367,457.0,google-flan-t5-xxl,zero-shot,problemsolution
+accuracy,0.3890353189246178,0.3890353189246178,0.3890353189246178,0.3890353189246178,google-flan-t5-xxl,zero-shot,problemsolution
+macro avg,0.3806967916342916,0.3358016531092669,0.2874677767993552,1897.0,google-flan-t5-xxl,zero-shot,problemsolution
+weighted avg,0.5558537232891477,0.3890353189246178,0.3596127105527126,1897.0,google-flan-t5-xxl,zero-shot,problemsolution
+general complaint,1.0,0.0425531914893617,0.08163265306122448,94.0,BAAI-bge-large-en,zero-shot,topic
+personal complaint,0.0,0.0,0.0,16.0,BAAI-bge-large-en,zero-shot,topic
+platform policies,0.75,0.058823529411764705,0.10909090909090909,51.0,BAAI-bge-large-en,zero-shot,topic
+section 230,0.9770642201834863,0.7006578947368421,0.8160919540229885,304.0,BAAI-bge-large-en,zero-shot,topic
+trump ban,0.5952380952380952,0.7621951219512195,0.6684491978609626,164.0,BAAI-bge-large-en,zero-shot,topic
+twitter support,0.03015075376884422,1.0,0.05853658536585366,6.0,BAAI-bge-large-en,zero-shot,topic
+accuracy,0.552755905511811,0.552755905511811,0.552755905511811,0.552755905511811,BAAI-bge-large-en,zero-shot,topic
+macro avg,0.5587421781984042,0.42737162293153136,0.2889668832336564,635.0,BAAI-bge-large-en,zero-shot,topic
+weighted avg,0.830043267838489,0.552755905511811,0.5847337759618472,635.0,BAAI-bge-large-en,zero-shot,topic
+general complaint,0.7910447761194029,0.5638297872340425,0.6583850931677019,94.0,google-flan-t5-xxl,zero-shot,topic
+personal complaint,0.8,0.5,0.6153846153846154,16.0,google-flan-t5-xxl,zero-shot,topic
+platform policies,0.6607142857142857,0.7254901960784313,0.6915887850467289,51.0,google-flan-t5-xxl,zero-shot,topic
+section 230,0.9742765273311897,0.9967105263157895,0.9853658536585366,304.0,google-flan-t5-xxl,zero-shot,topic
+trump ban,0.8770053475935828,1.0,0.9344729344729344,164.0,google-flan-t5-xxl,zero-shot,topic
+twitter support,1.0,0.6666666666666666,0.8,6.0,google-flan-t5-xxl,zero-shot,topic
+accuracy,0.8960629921259843,0.8960629921259843,0.8960629921259843,0.8960629921259843,google-flan-t5-xxl,zero-shot,topic
+macro avg,0.8505068227930769,0.742116196049155,0.7808662136217529,635.0,google-flan-t5-xxl,zero-shot,topic
+weighted avg,0.8926985493554042,0.8960629921259843,0.8891498604835549,635.0,google-flan-t5-xxl,zero-shot,topic
+irrelevant,0.3418848167539267,0.5007668711656442,0.40634723086496577,1304.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,relevant
+relevant,0.3586206896551724,0.22455274521900062,0.2761760242792109,1621.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,relevant
+accuracy,0.3476923076923077,0.3476923076923077,0.3476923076923077,0.3476923076923077,sentence-transformers-all-MiniLM-L6-v2,zero-shot,relevant
+macro avg,0.3502527532045495,0.3626598081923224,0.34126162757208833,2925.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,relevant
+weighted avg,0.3511596372574889,0.34769230769230774,0.3342079057793218,2925.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,relevant
+general complaint,0.5,0.010638297872340425,0.020833333333333336,94.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+personal complaint,0.5,0.0625,0.1111111111111111,16.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+platform policies,0.5714285714285714,0.0784313725490196,0.13793103448275862,51.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+section 230,0.9878542510121457,0.8026315789473685,0.8856624319419237,304.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+trump ban,0.5888888888888889,0.9695121951219512,0.7327188940092166,164.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+twitter support,0.056074766355140186,1.0,0.10619469026548672,6.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+accuracy,0.6535433070866141,0.6535433070866141,0.6535433070866141,0.6535433070866141,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+macro avg,0.5340410796141243,0.4872855740817799,0.3324085825239717,635.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+weighted avg,0.7580547650810364,0.6535433070866141,0.6312047873057969,635.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,topic
+irrelevant,0.350597609561753,0.26993865030674846,0.3050259965337955,1304.0,BAAI-bge-large-en,zero-shot,relevant
+relevant,0.504424778761062,0.5977791486736582,0.5471485036702428,1621.0,BAAI-bge-large-en,zero-shot,relevant
+accuracy,0.4516239316239316,0.4516239316239316,0.4516239316239316,0.4516239316239316,BAAI-bge-large-en,zero-shot,relevant
+macro avg,0.4275111941614075,0.43385889949020334,0.42608725010201914,2925.0,BAAI-bge-large-en,zero-shot,relevant
+weighted avg,0.4358467860650282,0.4516239316239316,0.43920739279642157,2925.0,BAAI-bge-large-en,zero-shot,relevant
+Both,0.012658227848101266,0.17647058823529413,0.023622047244094484,17.0,BAAI-bge-large-en,zero-shot,problemsolution
+Neither,0.4805013927576602,0.3770491803278688,0.42253521126760557,915.0,BAAI-bge-large-en,zero-shot,problemsolution
+Problem,0.4090909090909091,0.03543307086614173,0.06521739130434782,508.0,BAAI-bge-large-en,zero-shot,problemsolution
+Solution,0.2505567928730512,0.4923413566739606,0.33210332103321033,457.0,BAAI-bge-large-en,zero-shot,problemsolution
+accuracy,0.31154454401686876,0.31154454401686876,0.31154454401686876,0.31154454401686876,BAAI-bge-large-en,zero-shot,problemsolution
+macro avg,0.28820183064243043,0.27032354902581635,0.21086949271231453,1897.0,BAAI-bge-large-en,zero-shot,problemsolution
+weighted avg,0.4017905115486785,0.31154454401686876,0.30148811049435664,1897.0,BAAI-bge-large-en,zero-shot,problemsolution
+constitutionality and jurisprudency,0.17647058823529413,0.6,0.2727272727272727,20.0,google-flan-t5-xxl,zero-shot,frame
+economic,0.14285714285714285,0.5,0.22222222222222224,2.0,google-flan-t5-xxl,zero-shot,frame
+external regulation and reputation,0.0,0.0,0.0,1.0,google-flan-t5-xxl,zero-shot,frame
+fairness and equality,0.7,0.1794871794871795,0.2857142857142857,39.0,google-flan-t5-xxl,zero-shot,frame
+"law and order, crime and justice frames",0.08450704225352113,0.5,0.14457831325301204,12.0,google-flan-t5-xxl,zero-shot,frame
+morality,0.08823529411764706,0.5,0.15,6.0,google-flan-t5-xxl,zero-shot,frame
+other,0.01098901098901099,0.25,0.021052631578947368,4.0,google-flan-t5-xxl,zero-shot,frame
+policy prescription and evaluation,0.9047619047619048,0.08878504672897196,0.16170212765957448,214.0,google-flan-t5-xxl,zero-shot,frame
+political,0.5454545454545454,0.3,0.3870967741935483,20.0,google-flan-t5-xxl,zero-shot,frame
+security and defense frames,0.0,0.0,0.0,4.0,google-flan-t5-xxl,zero-shot,frame
+accuracy,0.17080745341614906,0.17080745341614906,0.17080745341614906,0.17080745341614906,google-flan-t5-xxl,zero-shot,frame
+macro avg,0.2653275528669066,0.29182722262161515,0.16450936273488628,322.0,google-flan-t5-xxl,zero-shot,frame
+weighted avg,0.736741356814481,0.17080745341614906,0.19287946624291577,322.0,google-flan-t5-xxl,zero-shot,frame
+irrelevant,0.37037037037037035,0.007668711656441718,0.015026296018031555,1304.0,google-flan-t5-xxl,zero-shot,relevant
+relevant,0.5534851621808143,0.9895126465144972,0.7098915689311794,1621.0,google-flan-t5-xxl,zero-shot,relevant
+accuracy,0.5517948717948717,0.5517948717948717,0.5517948717948717,0.5517948717948717,google-flan-t5-xxl,zero-shot,relevant
+macro avg,0.46192776627559234,0.49859067908546945,0.3624589324746055,2925.0,google-flan-t5-xxl,zero-shot,relevant
+weighted avg,0.4718503968745515,0.5517948717948717,0.4001123156393009,2925.0,google-flan-t5-xxl,zero-shot,relevant
+constitutionality and jurisprudency,1.0,0.1,0.18181818181818182,20.0,stabilityai-StableBeluga-13B,zero-shot,frame
+economic,0.0,0.0,0.0,2.0,stabilityai-StableBeluga-13B,zero-shot,frame
+external regulation and reputation,0.0,0.0,0.0,1.0,stabilityai-StableBeluga-13B,zero-shot,frame
+fairness and equality,1.0,0.05128205128205128,0.09756097560975609,39.0,stabilityai-StableBeluga-13B,zero-shot,frame
+"law and order, crime and justice frames",0.0,0.0,0.0,12.0,stabilityai-StableBeluga-13B,zero-shot,frame
+morality,0.5,0.16666666666666666,0.25,6.0,stabilityai-StableBeluga-13B,zero-shot,frame
+other,0.0,0.0,0.0,4.0,stabilityai-StableBeluga-13B,zero-shot,frame
+policy prescription and evaluation,0.8611111111111112,0.14485981308411214,0.248,214.0,stabilityai-StableBeluga-13B,zero-shot,frame
+political,0.08225108225108226,0.95,0.15139442231075698,20.0,stabilityai-StableBeluga-13B,zero-shot,frame
+security and defense frames,0.0,0.0,0.0,4.0,stabilityai-StableBeluga-13B,zero-shot,frame
+accuracy,0.17080745341614906,0.17080745341614906,0.17080745341614906,0.17080745341614906,stabilityai-StableBeluga-13B,zero-shot,frame
+macro avg,0.34433621933621933,0.141280853103283,0.09287735797386948,322.0,stabilityai-StableBeluga-13B,zero-shot,frame
+weighted avg,0.7699465820583834,0.17080745341614906,0.20199108736446977,322.0,stabilityai-StableBeluga-13B,zero-shot,frame
+Negative Stance,0.3353115727002967,0.5231481481481481,0.40867992766726946,216.0,google-flan-t5-xxl,zero-shot,stance
+Neutral Stance,0.8372093023255814,0.22153846153846155,0.35036496350364965,325.0,google-flan-t5-xxl,zero-shot,stance
+No Stance,0.16666666666666666,0.007352941176470588,0.014084507042253521,136.0,google-flan-t5-xxl,zero-shot,stance
+Positive Stance,0.06028368794326241,0.5,0.10759493670886075,34.0,google-flan-t5-xxl,zero-shot,stance
+accuracy,0.28551336146272854,0.28551336146272854,0.28551336146272854,0.28551336146272854,google-flan-t5-xxl,zero-shot,stance
+macro avg,0.34986780740895185,0.3130098877157701,0.22018108373050835,711.0,google-flan-t5-xxl,zero-shot,stance
+weighted avg,0.5193201617662667,0.28551336146272854,0.29214795825691153,711.0,google-flan-t5-xxl,zero-shot,stance
+constitutionality and jurisprudency,0.36363636363636365,0.2,0.25806451612903225,20.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+economic,0.0,0.0,0.0,2.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+external regulation and reputation,0.0,0.0,0.0,1.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+fairness and equality,1.0,0.02564102564102564,0.05,39.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+"law and order, crime and justice frames",0.6666666666666666,0.16666666666666666,0.26666666666666666,12.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+morality,0.14285714285714285,0.16666666666666666,0.15384615384615383,6.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+other,0.0,0.0,0.0,4.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+policy prescription and evaluation,0.8333333333333334,0.02336448598130841,0.04545454545454545,214.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+political,0.09259259259259259,0.75,0.16483516483516486,20.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+security and defense frames,0.0,0.0,0.0,4.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+accuracy,0.08695652173913043,0.08695652173913043,0.08695652173913043,0.08695652173913043,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+macro avg,0.3099086099086099,0.13323388449556672,0.0938867046931563,322.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+weighted avg,0.7307920972517247,0.08695652173913043,0.07533646978147078,322.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,frame
+Both,0.0,0.0,0.0,17.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+Neither,0.4643564356435644,0.512568306010929,0.4872727272727273,915.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+Problem,0.27837837837837837,0.40551181102362205,0.3301282051282051,508.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+Solution,0.10869565217391304,0.010940919037199124,0.019880715705765408,457.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+accuracy,0.3584607274644175,0.3584607274644175,0.3584607274644175,0.3584607274644175,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+macro avg,0.21285761654896396,0.2322552590179375,0.20932041202667445,1897.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+weighted avg,0.32471073688642904,0.3584607274644175,0.3282262312794984,1897.0,sentence-transformers-all-MiniLM-L6-v2,zero-shot,problemsolution
+Negative Stance,0.32210526315789473,0.7083333333333334,0.4428364688856729,216.0,stabilityai-StableBeluga-13B,zero-shot,stance
+Neutral Stance,0.7857142857142857,0.033846153846153845,0.06489675516224189,325.0,stabilityai-StableBeluga-13B,zero-shot,stance
+No Stance,0.19101123595505617,0.125,0.15111111111111108,136.0,stabilityai-StableBeluga-13B,zero-shot,stance
+Positive Stance,0.09774436090225563,0.38235294117647056,0.15568862275449102,34.0,stabilityai-StableBeluga-13B,zero-shot,stance
+accuracy,0.27285513361462727,0.27285513361462727,0.27285513361462727,0.27285513361462727,stabilityai-StableBeluga-13B,zero-shot,stance
+macro avg,0.3491437864323731,0.3123831070889894,0.20363323947837922,711.0,stabilityai-StableBeluga-13B,zero-shot,stance
+weighted avg,0.4982176034596519,0.27285513361462727,0.20054662024162836,711.0,stabilityai-StableBeluga-13B,zero-shot,stance
+irrelevant,0.526536312849162,0.28911042944785276,0.37326732673267327,1304.0,stabilityai-StableBeluga-13B,zero-shot,relevant
+relevant,0.5803531009506564,0.7908698334361505,0.6694516971279373,1621.0,stabilityai-StableBeluga-13B,zero-shot,relevant
+accuracy,0.5671794871794872,0.5671794871794872,0.5671794871794872,0.5671794871794872,stabilityai-StableBeluga-13B,zero-shot,relevant
+macro avg,0.5534447068999092,0.5399901314420016,0.5213595119303053,2925.0,stabilityai-StableBeluga-13B,zero-shot,relevant
+weighted avg,0.5563609328534432,0.5671794871794872,0.5374091607192453,2925.0,stabilityai-StableBeluga-13B,zero-shot,relevant

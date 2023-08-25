@@ -1,0 +1,304 @@
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: topic
+-----------------------------------------------------------
+                    precision    recall  f1-score   support
+
+ general complaint       0.53      0.22      0.31        94
+personal complaint       0.13      0.31      0.19        16
+ platform policies       0.41      0.86      0.56        51
+       section 230       0.98      0.95      0.97       304
+         trump ban       0.92      0.79      0.85       164
+   twitter support       0.25      0.50      0.33         6
+
+          accuracy                           0.78       635
+         macro avg       0.54      0.61      0.53       635
+      weighted avg       0.82      0.78      0.78       635
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: problemsolution
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+        Both       0.00      0.00      0.00        17
+     Neither       0.92      0.03      0.05       915
+     Problem       0.28      0.90      0.43       508
+    Solution       0.18      0.09      0.12       457
+
+    accuracy                           0.28      1897
+   macro avg       0.35      0.25      0.15      1897
+weighted avg       0.56      0.28      0.17      1897
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: stance
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+Negative Stance       0.33      0.02      0.04       216
+ Neutral Stance       0.45      0.74      0.56       325
+      No Stance       0.21      0.21      0.21       136
+Positive Stance       0.03      0.03      0.03        34
+
+       accuracy                           0.38       711
+      macro avg       0.26      0.25      0.21       711
+   weighted avg       0.35      0.38      0.31       711
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: stance
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+Negative Stance       0.37      0.44      0.40       216
+ Neutral Stance       0.57      0.16      0.25       325
+      No Stance       0.16      0.34      0.22       136
+Positive Stance       0.04      0.09      0.05        34
+
+       accuracy                           0.28       711
+      macro avg       0.28      0.26      0.23       711
+   weighted avg       0.40      0.28      0.28       711
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: frame
+--------------------------------------------------------------------------------
+                                         precision    recall  f1-score   support
+
+    constitutionality and jurisprudency       0.10      0.05      0.07        20
+                               economic       0.00      0.00      0.00         2
+     external regulation and reputation       0.00      0.00      0.00         1
+                  fairness and equality       0.31      0.10      0.15        39
+law and order, crime and justice frames       0.00      0.00      0.00        12
+                               morality       0.09      0.33      0.14         6
+                                  other       0.00      0.00      0.00         4
+     policy prescription and evaluation       1.00      0.01      0.03       214
+                              political       0.13      0.45      0.20        20
+            security and defense frames       0.04      0.25      0.07         4
+
+                               accuracy                           0.06       322
+                              macro avg       0.17      0.12      0.07       322
+                           weighted avg       0.72      0.06      0.06       322
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: problemsolution
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+        Both       0.00      0.00      0.00        17
+     Neither       0.75      0.18      0.29       915
+     Problem       0.34      0.82      0.48       508
+    Solution       0.44      0.34      0.38       457
+
+    accuracy                           0.39      1897
+   macro avg       0.38      0.34      0.29      1897
+weighted avg       0.56      0.39      0.36      1897
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: topic
+-----------------------------------------------------------
+                    precision    recall  f1-score   support
+
+ general complaint       1.00      0.04      0.08        94
+personal complaint       0.00      0.00      0.00        16
+ platform policies       0.75      0.06      0.11        51
+       section 230       0.98      0.70      0.82       304
+         trump ban       0.60      0.76      0.67       164
+   twitter support       0.03      1.00      0.06         6
+
+          accuracy                           0.55       635
+         macro avg       0.56      0.43      0.29       635
+      weighted avg       0.83      0.55      0.58       635
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: topic
+-----------------------------------------------------------
+                    precision    recall  f1-score   support
+
+ general complaint       0.79      0.56      0.66        94
+personal complaint       0.80      0.50      0.62        16
+ platform policies       0.66      0.73      0.69        51
+       section 230       0.97      1.00      0.99       304
+         trump ban       0.88      1.00      0.93       164
+   twitter support       1.00      0.67      0.80         6
+
+          accuracy                           0.90       635
+         macro avg       0.85      0.74      0.78       635
+      weighted avg       0.89      0.90      0.89       635
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: relevant
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  irrelevant       0.34      0.50      0.41      1304
+    relevant       0.36      0.22      0.28      1621
+
+    accuracy                           0.35      2925
+   macro avg       0.35      0.36      0.34      2925
+weighted avg       0.35      0.35      0.33      2925
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: topic
+-----------------------------------------------------------
+                    precision    recall  f1-score   support
+
+ general complaint       0.50      0.01      0.02        94
+personal complaint       0.50      0.06      0.11        16
+ platform policies       0.57      0.08      0.14        51
+       section 230       0.99      0.80      0.89       304
+         trump ban       0.59      0.97      0.73       164
+   twitter support       0.06      1.00      0.11         6
+
+          accuracy                           0.65       635
+         macro avg       0.53      0.49      0.33       635
+      weighted avg       0.76      0.65      0.63       635
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: relevant
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  irrelevant       0.35      0.27      0.31      1304
+    relevant       0.50      0.60      0.55      1621
+
+    accuracy                           0.45      2925
+   macro avg       0.43      0.43      0.43      2925
+weighted avg       0.44      0.45      0.44      2925
+ 
+
+Model: BAAI-bge-large-en. Task: zero-shot. Outcome Variable: problemsolution
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+        Both       0.01      0.18      0.02        17
+     Neither       0.48      0.38      0.42       915
+     Problem       0.41      0.04      0.07       508
+    Solution       0.25      0.49      0.33       457
+
+    accuracy                           0.31      1897
+   macro avg       0.29      0.27      0.21      1897
+weighted avg       0.40      0.31      0.30      1897
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: frame
+--------------------------------------------------------------------------------
+                                         precision    recall  f1-score   support
+
+    constitutionality and jurisprudency       0.18      0.60      0.27        20
+                               economic       0.14      0.50      0.22         2
+     external regulation and reputation       0.00      0.00      0.00         1
+                  fairness and equality       0.70      0.18      0.29        39
+law and order, crime and justice frames       0.08      0.50      0.14        12
+                               morality       0.09      0.50      0.15         6
+                                  other       0.01      0.25      0.02         4
+     policy prescription and evaluation       0.90      0.09      0.16       214
+                              political       0.55      0.30      0.39        20
+            security and defense frames       0.00      0.00      0.00         4
+
+                               accuracy                           0.17       322
+                              macro avg       0.27      0.29      0.16       322
+                           weighted avg       0.74      0.17      0.19       322
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: relevant
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  irrelevant       0.37      0.01      0.02      1304
+    relevant       0.55      0.99      0.71      1621
+
+    accuracy                           0.55      2925
+   macro avg       0.46      0.50      0.36      2925
+weighted avg       0.47      0.55      0.40      2925
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: frame
+--------------------------------------------------------------------------------
+                                         precision    recall  f1-score   support
+
+    constitutionality and jurisprudency       1.00      0.10      0.18        20
+                               economic       0.00      0.00      0.00         2
+     external regulation and reputation       0.00      0.00      0.00         1
+                  fairness and equality       1.00      0.05      0.10        39
+law and order, crime and justice frames       0.00      0.00      0.00        12
+                               morality       0.50      0.17      0.25         6
+                                  other       0.00      0.00      0.00         4
+     policy prescription and evaluation       0.86      0.14      0.25       214
+                              political       0.08      0.95      0.15        20
+            security and defense frames       0.00      0.00      0.00         4
+
+                               accuracy                           0.17       322
+                              macro avg       0.34      0.14      0.09       322
+                           weighted avg       0.77      0.17      0.20       322
+ 
+
+Model: google-flan-t5-xxl. Task: zero-shot. Outcome Variable: stance
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+Negative Stance       0.34      0.52      0.41       216
+ Neutral Stance       0.84      0.22      0.35       325
+      No Stance       0.17      0.01      0.01       136
+Positive Stance       0.06      0.50      0.11        34
+
+       accuracy                           0.29       711
+      macro avg       0.35      0.31      0.22       711
+   weighted avg       0.52      0.29      0.29       711
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: frame
+--------------------------------------------------------------------------------
+                                         precision    recall  f1-score   support
+
+    constitutionality and jurisprudency       0.36      0.20      0.26        20
+                               economic       0.00      0.00      0.00         2
+     external regulation and reputation       0.00      0.00      0.00         1
+                  fairness and equality       1.00      0.03      0.05        39
+law and order, crime and justice frames       0.67      0.17      0.27        12
+                               morality       0.14      0.17      0.15         6
+                                  other       0.00      0.00      0.00         4
+     policy prescription and evaluation       0.83      0.02      0.05       214
+                              political       0.09      0.75      0.16        20
+            security and defense frames       0.00      0.00      0.00         4
+
+                               accuracy                           0.09       322
+                              macro avg       0.31      0.13      0.09       322
+                           weighted avg       0.73      0.09      0.08       322
+ 
+
+Model: sentence-transformers-all-MiniLM-L6-v2. Task: zero-shot. Outcome Variable: problemsolution
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+        Both       0.00      0.00      0.00        17
+     Neither       0.46      0.51      0.49       915
+     Problem       0.28      0.41      0.33       508
+    Solution       0.11      0.01      0.02       457
+
+    accuracy                           0.36      1897
+   macro avg       0.21      0.23      0.21      1897
+weighted avg       0.32      0.36      0.33      1897
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: stance
+--------------------------------------------------------
+                 precision    recall  f1-score   support
+
+Negative Stance       0.32      0.71      0.44       216
+ Neutral Stance       0.79      0.03      0.06       325
+      No Stance       0.19      0.12      0.15       136
+Positive Stance       0.10      0.38      0.16        34
+
+       accuracy                           0.27       711
+      macro avg       0.35      0.31      0.20       711
+   weighted avg       0.50      0.27      0.20       711
+ 
+
+Model: stabilityai-StableBeluga-13B. Task: zero-shot. Outcome Variable: relevant
+-----------------------------------------------------
+              precision    recall  f1-score   support
+
+  irrelevant       0.53      0.29      0.37      1304
+    relevant       0.58      0.79      0.67      1621
+
+    accuracy                           0.57      2925
+   macro avg       0.55      0.54      0.52      2925
+weighted avg       0.56      0.57      0.54      2925
+ 
+
