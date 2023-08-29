@@ -1,6 +1,5 @@
 import argparse
 import pandas as pd
-import seaborn as sns
 import numpy as np
 from pathlib import Path
 import re
@@ -8,6 +7,8 @@ from plotnine import (
     ggplot,
     aes,
     geom_point,
+    geom_line,
+    geom_hline,
     labs,
     facet_grid,
     theme_bw,
@@ -16,6 +17,7 @@ from plotnine import (
     scale_y_continuous,
     scale_color_brewer,
     theme,
+    element_text,
 )
 
 
@@ -54,42 +56,40 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
+def make_f1_fig(df: pd.DataFrame):
     options = ["political"]
 
     # selecting rows based on condition
 
     subset = df[df["label"].isin(options)]
 
-    f1_fig = sns.relplot(
-        data=subset,
-        x="models",
-        y="f1-score",
-        hue="tasks",
-        # col="columns",
-        kind="line",
+    f1_fig = (
+        ggplot(subset, aes("models", "f1-score", color="tasks", group="tasks"))
+        + geom_point()
+        + geom_line()
+        + theme_bw()
+        + scale_color_brewer(type="qual", palette="Dark2")
+        + theme(axis_text_x=element_text(rotation=10))
     )
-    f1_fig.set_xticklabels(rotation=10)
 
     return f1_fig
 
 
-def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
+def make_acc_fig(df: pd.DataFrame):
     options = ["accuracy"]
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
     subset = subset.loc[subset["columns"] == "political"]
 
-    acc_fig = sns.relplot(
-        data=subset,
-        x="models",
-        y="support",
-        hue="tasks",
-        # col="columns",
-        kind="line",
-    )
     acc_fig = (
-        acc_fig.refline(y=0.5).set_ylabels("Accuracy").set_xticklabels(rotation=10)
+        ggplot(subset, aes("models", "support", color="tasks", group="tasks"))
+        + geom_point()
+        + geom_line()
+        + geom_hline(yintercept=0.5)
+        + theme_bw()
+        + scale_color_brewer(type="qual", palette="Dark2")
+        + theme(axis_text_x=element_text(rotation=10))
+        + labs(y="Accuracy")
     )
 
     return acc_fig
@@ -132,9 +132,9 @@ def main():
 
     out_path = f"{data_name}_figures/"
 
-    f1_figure.savefig(f"{out_path}f1_figure.png")
-    acc_figure.savefig(f"{out_path}acc_figure.png")
-    prec_rec_figure.save(f"{out_path}prec_rec_figure.png")
+    f1_figure.save(f"{out_path}f1_figure.png", dpi=300)
+    acc_figure.save(f"{out_path}acc_figure.png", dpi=300)
+    prec_rec_figure.save(f"{out_path}prec_rec_figure.png", dpi=300)
 
 
 if __name__ == "__main__":
