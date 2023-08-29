@@ -9,8 +9,8 @@ from contextlib import redirect_stdout
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Evaluation")
-    parser.add_argument("-df", "--data_folder", type=str, default="predictions/")
-    parser.add_argument("-of", "--output_folder", type=str, default="output/")
+    parser.add_argument("-df", "--in_dir", type=str, default="predictions/")
+    parser.add_argument("-of", "--out_dir", type=str, default="output/")
     return parser
 
 def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -33,8 +33,8 @@ def print_report(data: pd.DataFrame, column: str) -> None:
 def main():
     parser = create_parser()
     args = parser.parse_args()
-    in_dir = Path(args.data_folder)
-    out_dir = Path(args.output_folder)
+    in_dir = Path(args.in_dir)
+    out_dir = Path(args.out_dir)
 
     # Collecting prediction files from given directory
     files = glob(str(in_dir.joinpath("*_pred*.csv")))
