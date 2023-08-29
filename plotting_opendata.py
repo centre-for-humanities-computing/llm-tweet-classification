@@ -8,7 +8,7 @@ from pathlib import Path
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Plotting")
-    parser.add_argument("-df", "--data_folder", type=str, default="opendata_preds/")
+    parser.add_argument("--data_dir", type=str, default="opendata_preds/")
 
     return parser
 
@@ -64,7 +64,7 @@ def main():
     parser = create_parser()
     args = parser.parse_args()
 
-    data_name = Path(args.data_folder).name
+    data_name = Path(args.data_dir).name
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
 
     df = clean_dataframe(df)
