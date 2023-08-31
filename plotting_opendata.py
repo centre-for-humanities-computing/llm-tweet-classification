@@ -45,6 +45,41 @@ def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
 def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
     acc = df.loc[df["label"] == "accuracy"]
 
+    # adding gilardi data
+    gil = {
+        "label": ["accuracy"] * 10,
+        "f1-score": [
+            0.565,
+            0.57,
+            0.3785,
+            0.3825,
+            0.7275,
+            0.7025,
+            0.7675,
+            0.7865,
+            0.609,
+            0.618,
+        ],
+        "models": ["ChatGPT (temp 1)", "ChatGPT (temp 0.2)"] * 5,
+        "tasks": ["zero shot"] * 10,
+        "columns": [
+            "problemsolution",
+            "problemsolution",
+            "frame",
+            "frame",
+            "relevant",
+            "relevant",
+            "stance",
+            "stance",
+            "topic",
+            "topic",
+        ],
+    }
+
+    gil = pd.DataFrame(gil)
+
+    acc = pd.concat([acc, gil])
+
     acc_fig = sns.FacetGrid(
         acc,
         col="columns",
@@ -53,7 +88,9 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
         palette="colorblind",
     )
 
-    acc_fig.map(sns.barplot, "f1-score", "models").set_xlabels("Accuracy")
+    acc_fig.map(
+        sns.barplot, "f1-score", "models", order=acc["models"].unique()
+    ).set_xlabels("Accuracy")
 
     return acc_fig
 
