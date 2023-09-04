@@ -36,6 +36,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "stabilityai-StableBeluga-13B",
         "gpt-3.5-turbo",
         "gpt-4",
+        "distilbert",
     ]
 
     short_names = [
@@ -45,8 +46,8 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "beluga-13b",
         "gpt-3.5-turbo",
         "gpt4",
+        "distilbert",
     ]
-    # short_names = shorten_modelnames(model_order)
 
     df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
     df["models"] = df["models"].cat.rename_categories(short_names)
@@ -118,11 +119,9 @@ def main():
     data_name = Path(args.data_dir).name
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
 
-    df = clean_dataframe(df)
-
     distilbert = pd.DataFrame(
         {
-            "label": ["accuracy", "political"],
+            "Unnamed: 0": ["accuracy", "political"],
             "precision": [0.86, 0.86],
             "recall": [0.86, 0.86],
             "f1-score": [0.87, 0.87],
@@ -134,6 +133,8 @@ def main():
     )
 
     df = pd.concat([df, distilbert])
+
+    df = clean_dataframe(df)
 
     df["tasks"] = (
         df["tasks"]
