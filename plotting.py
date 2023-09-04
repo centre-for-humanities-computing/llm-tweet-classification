@@ -64,7 +64,6 @@ def make_f1_fig(df: pd.DataFrame):
     f1_fig = (
         ggplot(subset, aes("models", "f1-score", color="tasks", group="tasks"))
         + geom_point()
-        + geom_line()
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
         + theme(axis_text_x=element_text(rotation=10))
@@ -82,7 +81,6 @@ def make_acc_fig(df: pd.DataFrame):
     acc_fig = (
         ggplot(subset, aes("models", "support", color="tasks", group="tasks"))
         + geom_point()
-        + geom_line()
         + geom_hline(yintercept=0.5)
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
@@ -121,6 +119,27 @@ def main():
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
 
     df = clean_dataframe(df)
+
+    distilbert = pd.DataFrame(
+        {
+            "label": ["accuracy", "political"],
+            "precision": [0.86, 0.86],
+            "recall": [0.86, 0.86],
+            "f1-score": [0.87, 0.87],
+            "support": [0.87, 0.87],
+            "models": ["distilbert", "distilbert"],
+            "tasks": ["supervised", "supervised"],
+            "columns": ["political", "political"],
+        }
+    )
+
+    df = pd.concat([df, distilbert])
+
+    df["tasks"] = (
+        df["tasks"]
+        .astype("category")
+        .cat.reorder_categories(["supervised", "few-shot", "zero-shot"])
+    )
 
     f1_figure = make_f1_fig(df)
     acc_figure = make_acc_fig(df)

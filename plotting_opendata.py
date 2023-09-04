@@ -12,7 +12,7 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.rename(columns={"Unnamed: 0": "label"})
+    df = df.rename(columns={"Unnamed: 0": "label", "columns": "task"})
 
     model_order = [
         "sentence-transformers-all-MiniLM-L6-v2",
@@ -34,7 +34,7 @@ def make_f1_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
     subset = df[~df["label"].isin(options)]
 
     f1_fig = sns.FacetGrid(
-        subset, col="columns", hue="models", col_wrap=3, palette="colorblind"
+        subset, col="task", hue="models", col_wrap=3, palette="colorblind"
     )
 
     f1_fig.map(sns.barplot, "f1-score", "models", errcolor="0", errwidth="1")
@@ -62,7 +62,7 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
         ],
         "models": ["ChatGPT (temp 1)", "ChatGPT (temp 0.2)"] * 5,
         "tasks": ["zero shot"] * 10,
-        "columns": [
+        "task": [
             "problemsolution",
             "problemsolution",
             "frame",
@@ -82,15 +82,23 @@ def make_acc_fig(df: pd.DataFrame) -> sns.axisgrid.FacetGrid:
 
     acc_fig = sns.FacetGrid(
         acc,
-        col="columns",
+        col="task",
         hue="models",
         col_wrap=3,
+        col_order=["topic", "relevant", "stance", "problemsolution", "frame"],
         palette="colorblind",
     )
 
-    acc_fig.map(
-        sns.barplot, "f1-score", "models", order=acc["models"].unique()
-    ).set_xlabels("Accuracy")
+    order = [
+        "all-minilm-l6",
+        "bge-large",
+        "beluga-13b",
+        "t5-xxl",
+        "ChatGPT (temp 1)",
+        "ChatGPT (temp 0.2)",
+    ]
+
+    acc_fig.map(sns.barplot, "f1-score", "models", order=order).set_xlabels("Accuracy")
 
     return acc_fig
 
