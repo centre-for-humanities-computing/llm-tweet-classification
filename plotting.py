@@ -5,7 +5,6 @@ from plotnine import (
     ggplot,
     aes,
     geom_point,
-    geom_line,
     geom_hline,
     labs,
     facet_grid,
@@ -37,6 +36,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "gpt-3.5-turbo",
         "gpt-4",
         "distilbert",
+        "glove200d",
     ]
 
     short_names = [
@@ -47,6 +47,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "gpt-3.5-turbo",
         "gpt4",
         "distilbert",
+        "glove200d",
     ]
 
     df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
@@ -99,8 +100,8 @@ def make_prec_rec_fig(df: pd.DataFrame):
 
     prec_rec_fig = (
         ggplot(subset, aes("precision", "recall", color="models"))
-        + geom_point()
-        + geom_text(aes(label="models"), size=8, nudge_y=0.04)
+        + geom_point(size=0.5)
+        + geom_text(aes(label="models", angle=25), size=8, nudge_y=0.02, nudge_x=-0.03)
         + facet_grid("~tasks")
         + theme_bw()
         + scale_x_continuous(limits=[0, 1])
@@ -119,20 +120,20 @@ def main():
     data_name = Path(args.data_dir).name
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
 
-    distilbert = pd.DataFrame(
+    supervised_data = pd.DataFrame(
         {
-            "Unnamed: 0": ["accuracy", "political"],
-            "precision": [0.86, 0.86],
-            "recall": [0.86, 0.86],
-            "f1-score": [0.87, 0.87],
-            "support": [0.87, 0.87],
-            "models": ["distilbert", "distilbert"],
-            "tasks": ["supervised", "supervised"],
-            "columns": ["political", "political"],
+            "Unnamed: 0": ["accuracy", "political"] * 2,
+            "precision": [0.86, 0.86, 0.86, 0.86],
+            "recall": [0.86, 0.86, 0.8, 0.8],
+            "f1-score": [0.87, 0.87, 0.83, 0.83],
+            "support": [0.87, 0.87, 0.83, 0.83],
+            "models": ["distilbert", "distilbert", "glove200d", "glove200d"],
+            "tasks": ["supervised"] * 4,
+            "columns": ["political"] * 4,
         }
     )
 
-    df = pd.concat([df, distilbert])
+    df = pd.concat([df, supervised_data])
 
     df = clean_dataframe(df)
 
