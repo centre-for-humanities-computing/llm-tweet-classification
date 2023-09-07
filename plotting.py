@@ -13,6 +13,7 @@ from plotnine import (
     scale_x_continuous,
     scale_y_continuous,
     scale_color_brewer,
+    position_jitter,
     theme,
     element_text,
 )
@@ -100,14 +101,18 @@ def make_prec_rec_fig(df: pd.DataFrame):
 
     prec_rec_fig = (
         ggplot(subset, aes("precision", "recall", color="models"))
-        + geom_point(size=0.5)
-        + geom_text(aes(label="models", angle=25), size=8, nudge_y=0.02, nudge_x=-0.03)
+        + geom_point(size=0.3, shape="+")
+        # + geom_text(
+        #     aes(label="models"),
+        #     size=7,
+        #     position=position_jitter(height=0.03),
+        # )
         + facet_grid("~tasks")
         + theme_bw()
         + scale_x_continuous(limits=[0, 1])
         + scale_y_continuous(limits=[0, 1])
         + scale_color_brewer(type="qual", palette=2)
-        + theme(legend_position="none")
+        # + theme(legend_position="none")
     )
 
     return prec_rec_fig
