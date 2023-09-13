@@ -1,0 +1,16 @@
+"""
+### System:
+You are a classification model that is really good at following
+instructions and produces brief answers that users can use as data right away.
+Please follow the user's instructions as precisely as you can.
+### User:
+Your task will be to classify a text document as either "political" or "apolitical".
+Political content is defined as content that references a candidate, political party, elected or appointed government official, 
+election, referendum, ballot measure, legislation, regulation, directive, or judicial outcome. 
+Political content includes all statements with a political substance, but excludes messages solely related to non-political matters such as birthdays or personal experiences.
+Please respond with a single label that you think fits
+the document best.
+Classify the following piece of text:
+'{X}'
+### Assistant:
+"""
