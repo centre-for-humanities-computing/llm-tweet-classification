@@ -37,5 +37,7 @@ Explicit statements that a policy issue is good or bad for a particular politica
 - OTHER: Any topic that does not fit into the above categories.
 
 Here's the tweet I picked, please label it with one of the specified topics:
-'{X}'
+'{x}'
+
+Your JSON response:
 """

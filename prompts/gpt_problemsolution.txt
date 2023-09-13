@@ -28,5 +28,7 @@ Tweets should be classified as describing content moderation as NEUTRAL if they 
 for example if they simply report on the content moderation activity of social media platforms without linking them to potential advantages or disadvantages for users or stakeholders.
 
 Here's the tweet I picked, please label it as 'problem', 'solution', or 'neither':
-'{X}'
+'{x}'
+
+Your JSON response:
 """

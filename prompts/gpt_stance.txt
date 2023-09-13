@@ -22,5 +22,7 @@ Carefully read the text of the tweet, paying close attention to details.
 Classify the tweet as having a positive stance towards Section 230, a negative stance, or a neutral stance. 
 
 Here's the tweet I picked, please label it as 'positive', 'negative', or 'neutral':
-'{X}'
+'{x}'
+
+Your JSON response:
 """

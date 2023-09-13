@@ -28,5 +28,7 @@ Please classify the following text according to topic (defined by function of th
 You can choose from the following classes: SECTION 230, TRUMP BAN, COMPLAINTS, TWITTER SUPPORT, PLATFORM POLICIES, and OTHER. 
 
 Here's the tweet I picked, please label it using one of the specified classes:
-'{X}'
+'{x}'
+
+Your JSON response:
 """

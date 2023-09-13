@@ -22,5 +22,7 @@ This would include, for example, a Tweet by Donald Trump that Twitter has labell
 Just label 'relevant' or 'irrelevant' without any more explanation 
 
 Here's the tweet I picked, please label it as 'relevant' or 'irrelevant':
-'{X}'
+'{x}'
+
+Your JSON response:
 """
