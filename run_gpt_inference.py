@@ -25,31 +25,21 @@ def main():
     for model in ["gpt-4", "gpt-3.5-turbo"]:
         for prompt_type in ["custom", "generic"]:
             for column in ["political", "exemplar"]:
-                config = default_config.copy()
-                config["paths"]["out_dir"] = f"predictions_{prompt_type}/"
-                if prompt_type == "custom":
-                    config["paths"][
-                        "prompt_file"
-                    ] = f"prompts/gpt_{column}.txt"
-                config["model"]["name"] = model
-                config["inference"]["y_column"] = column
-                configs.append(config)
-                log_paths.append(
-                    log_dir.joinpath(
-                        f"{model}_{prompt_type}_{column}_zero-shot.log"
+                for task in ["zero", "few"]:
+                    config = default_config.copy()
+                    config["paths"]["out_dir"] = f"predictions_{prompt_type}/"
+                    if prompt_type == "custom":
+                        config["paths"][
+                            "prompt_file"
+                        ] = f"prompts/gpt_{task}_{column}.txt"
+                    config["model"]["name"] = model
+                    config["inference"]["y_column"] = column
+                    configs.append(config)
+                    log_paths.append(
+                        log_dir.joinpath(
+                            f"{model}_{prompt_type}_{column}_{zero}-shot.log"
+                        )
                     )
-                )
-    for model in ["gpt-4", "gpt-3.5-turbo"]:
-        for column in ["political", "exemplar"]:
-            config = default_config.copy()
-            config["paths"]["out_dir"] = "predictions_generic/"
-            config["model"]["name"] = model
-            config["model"]["task"] = "few-shot"
-            config["inference"]["y_column"] = column
-            configs.append(config)
-            log_paths.append(
-                log_dir.joinpath(f"{model}_generic_{column}_few-shot.log")
-            )
     print("Running all jobs in parallel with processes.")
     with Pool(processes=None) as pool:
         pool.starmap(run_log_config, zip(configs, log_paths))
