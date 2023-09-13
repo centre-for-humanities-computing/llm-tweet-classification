@@ -41,6 +41,16 @@ y_column="exemplar"
 n_examples=5
 ```
 
+If you intend to use a custom prompt for a given model, you can save it in a txt file and add its path to the
+`paths` section of the config.
+
+ ```
+[paths]
+in_file="labelled_data.csv"
+out_dir="predictions/"
+prompt_file="custom_prompt.txt"
+ ```
+
 You can run the CLI like this:
 
 ```bash

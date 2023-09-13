@@ -3,7 +3,7 @@ large language models and transformers."""
 import argparse
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 import pandas as pd
 from confection import Config
@@ -49,7 +49,9 @@ def get_model_type(
         )
 
 
-def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
+def prepare_model(
+    model: str, task: str, device: str, custom_prompt: Optional[str]
+) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
     if ("gpt-3" in model) or ("gpt-4" in model):
         print("Initializing connection to OpenAI")
@@ -69,24 +71,29 @@ def prepare_model(model: str, task: str, device: str) -> ClassifierMixin:
     else:
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)
+        model_kwargs = dict(model_name=model, device=device)
+        if (custom_prompt is not None) and (
+            model_type in ["text2text", "generative"]
+        ):
+            model_kwargs["prompt"] = custom_prompt
         if model_type == "text2text":
             if task == "zero-shot":
-                return Text2TextZeroShotClassifier(model, device=device)
+                return Text2TextZeroShotClassifier(**model_kwargs)
             else:
-                return Text2TextFewShotClassifier(model, device=device)
+                return Text2TextFewShotClassifier(**model_kwargs)
         elif model_type == "generative":
             if task == "zero-shot":
-                return GenerativeZeroShotClassifier(model, device=device)
+                return GenerativeZeroShotClassifier(**model_kwargs)
             else:
-                return GenerativeFewShotClassifier(model, device=device)
+                return GenerativeFewShotClassifier(**model_kwargs)
         elif model_type == "sentence-trf":
             if task == "zero-shot":
-                return SetFitZeroShotClassifier(model, device=device)
+                return SetFitZeroShotClassifier(**model_kwargs)
             else:
-                return SetFitFewShotClassifier(model, device=device)
+                return SetFitFewShotClassifier(**model_kwargs)
         else:
             if task == "zero-shot":
-                return ZeroShotClassifier(model, device=device)
+                return ZeroShotClassifier(**model_kwargs)
             else:
                 raise ValueError(
                     "You cannot use a zero shot model with task 'few-shot'."
@@ -131,6 +138,13 @@ def main():
     model_name = config["model"]["name"]
     print(f"{task} classification over {y_column} with {model_name}.")
 
+    try:
+        prompt_file = config["paths"]["prompt_file"]
+        with open(prompt_file, "r") as f:
+            custom_prompt = f.read()
+    except KeyError:
+        custom_prompt = None
+
     print("Creating output directory.")
     out_dir = config["paths"]["out_dir"]
     Path(out_dir).mkdir(exist_ok=True)
@@ -154,7 +168,10 @@ def main():
 
     print("Loading model")
     classifier = prepare_model(
-        model_name, task, device=config["system"]["device"]
+        model_name,
+        task,
+        device=config["system"]["device"],
+        custom_prompt=custom_prompt,
     )
 
     print("Fitting model")
