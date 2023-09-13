@@ -44,3 +44,4 @@ Explicit statements that a policy issue is good or bad for a particular politica
 Here's the tweet I picked, please label it with one of the specified topics:
 '{X}'
 ### Assistant:
+""" 
