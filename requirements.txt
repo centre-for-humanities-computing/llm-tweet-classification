@@ -2,10 +2,10 @@ pandas>=1.5.0
 numpy>=1.23.5
 plotnine>=0.12.2
 scikit-learn>=1.2.0
-scikit-llm>=0.2.0
 seaborn>=0.12.2
 stormtrooper>=0.3.2
 torch>=2.0.0
 confection>=0.1.0
 transformers>=4.25.0
 setfit>=0.7.0
+git+https://github.com/KennethEnevoldsen/scikit-llm.git@added-custom-prompt-functionality

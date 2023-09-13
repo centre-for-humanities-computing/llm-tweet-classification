@@ -65,9 +65,13 @@ def prepare_model(
         SKLLMConfig.set_openai_key(openai_key)
         SKLLMConfig.set_openai_org(openai_org)
         if task == "zero-shot":
-            return ZeroShotGPTClassifier(openai_model=model)
+            return ZeroShotGPTClassifier(
+                openai_model=model, prompt_template=custom_prompt
+            )
         else:
-            return FewShotGPTClassifier(openai_model=model)
+            return FewShotGPTClassifier(
+                openai_model=model, prompt_template=custom_prompt
+            )
     else:
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)
