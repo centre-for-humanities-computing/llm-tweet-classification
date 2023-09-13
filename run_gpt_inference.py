@@ -1,4 +1,4 @@
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -11,7 +11,8 @@ def run_log_config(config: Config, log_path: str):
     """Runs config and redirects stdout to a file."""
     with open(log_path, "w") as log_file:
         with redirect_stdout(log_file):
-            run_config(config)
+            with redirect_stderr(log_file):
+                run_config(config)
 
 
 def main():
