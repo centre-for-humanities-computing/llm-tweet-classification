@@ -42,3 +42,7 @@ def main():
     with Pool(processes=None) as pool:
         pool.starmap(run_log_config, zip(configs, log_paths))
     print("DONE")
+
+
+if __name__ == "__main__":
+    main()
