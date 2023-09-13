@@ -76,9 +76,7 @@ def prepare_model(
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)
         model_kwargs = dict(model_name=model, device=device)
-        if (custom_prompt is not None) and (
-            model_type in ["text2text", "generative"]
-        ):
+        if (custom_prompt is not None) and (model_type in ["text2text", "generative"]):
             model_kwargs["prompt"] = custom_prompt
         if model_type == "text2text":
             if task == "zero-shot":
@@ -112,11 +110,7 @@ def find_example_indices(
 ) -> pd.Index:
     """Finds N random examples of each label in the data set and
     returns the indices of these."""
-    return (
-        data.groupby(column)
-        .sample(n_examples_per_class, random_state=seed)
-        .index
-    )
+    return data.groupby(column).sample(n_examples_per_class, random_state=seed).index
 
 
 def load_data(in_file: str) -> pd.DataFrame:
@@ -128,15 +122,13 @@ def load_data(in_file: str) -> pd.DataFrame:
         raise ValueError("Input file needs to be .csv or .tsv.")
 
 
-def main():
-    parser = create_parser()
-    args = parser.parse_args()
-    config = Config().from_disk(args.config)
+def run_config(config: Config) -> None:
     task = config["model"]["task"]
     if task not in {"few-shot", "zero-shot"}:
         raise ValueError(
             f"Task should either be few-shot or zero-shot, recieved {task}"
         )
+
     x_column = config["inference"]["x_column"]
     y_column = config["inference"]["y_column"]
     model_name = config["model"]["name"]
@@ -165,8 +157,10 @@ def main():
         seed=config["system"]["seed"],
     )
     data["train_test_set"] = "test"
+
     if task == "few-shot":
         data["train_test_set"][train_indices] = "train"
+
     X_train = data[x_column][train_indices]
     y_train = data[y_column][train_indices]
 
@@ -186,11 +180,19 @@ def main():
 
     print("Saving predictions.")
     model_file = model_name.replace("/", "-")
-    out_path = Path(out_dir).joinpath(
-        f"{task}_pred_{y_column}_{model_file}.csv"
-    )
+    out_path = Path(out_dir).joinpath(f"{task}_pred_{y_column}_{model_file}.csv")
     data.to_csv(out_path)
     print("DONE")
+
+    return None
+
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+    config = Config().from_disk(args.config)
+
+    run_config(config)
 
 
 if __name__ == "__main__":
