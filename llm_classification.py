@@ -8,11 +8,11 @@ from typing import Literal, Optional
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
-from skllm import FewShotGPTClassifier, ZeroShotGPTClassifier
-from skllm.config import SKLLMConfig
 from stormtrooper import (
     GenerativeFewShotClassifier,
     GenerativeZeroShotClassifier,
+    OpenAIFewShotClassifier,
+    OpenAIZeroShotClassifier,
     SetFitFewShotClassifier,
     SetFitZeroShotClassifier,
     Text2TextFewShotClassifier,
@@ -54,24 +54,14 @@ def prepare_model(
 ) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
     if ("gpt-3" in model) or ("gpt-4" in model):
+        model_kwargs = dict(model_name=model, device=device)
         print("Initializing connection to OpenAI")
-        try:
-            openai_key = os.environ["OPENAI_KEY"]
-            openai_org = os.environ["OPENAI_ORG"]
-        except KeyError:
-            raise KeyError(
-                "Environment variables OPENAI_KEY and OPENAI_ORG not specified."
-            )
-        SKLLMConfig.set_openai_key(openai_key)
-        SKLLMConfig.set_openai_org(openai_org)
+        if (custom_prompt is not None) and (model_type in ["text2text", "generative"]):
+            model_kwargs["prompt"] = custom_prompt
         if task == "zero-shot":
-            return ZeroShotGPTClassifier(
-                openai_model=model, prompt_template=custom_prompt
-            )
+            return OpenAIZeroShotClassifier(**model_kwargs)
         else:
-            return FewShotGPTClassifier(
-                openai_model=model, prompt_template=custom_prompt
-            )
+            return OpenAIFewShotClassifier(**model_kwargs)
     else:
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)

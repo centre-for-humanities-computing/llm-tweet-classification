@@ -8,7 +8,12 @@ Please follow the user's instructions as precisely as you can.
 Your task will be to classify a text document as either "exemplar" or "not an exemplar".
 We adopt a broad definition of exemplars as people who are mentioned in relation to a story being reported. 
 They can be people directly affected and involved in the issue, or they may simply be commenting (in the form of a quote) on the issue or story.
-Please respond with a single label that you think fits the document best.
+
+Here are some examples of texts labelled by experts.
+{examples}
+
+Please respond with a single label that you think fits
+the document best.
 Classify the following piece of text:
 '{X}'
 ### Assistant:
