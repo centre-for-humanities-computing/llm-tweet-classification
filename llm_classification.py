@@ -1,7 +1,6 @@
 """CLI for running zero and few-shot classification on a tweet dataset with
 large language models and transformers."""
 import argparse
-import os
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -54,9 +53,9 @@ def prepare_model(
 ) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
     if ("gpt-3" in model) or ("gpt-4" in model):
-        model_kwargs = dict(model_name=model, device=device)
+        model_kwargs = dict(model_name=model)
         print("Initializing connection to OpenAI")
-        if (custom_prompt is not None) and (model_type in ["text2text", "generative"]):
+        if custom_prompt is not None:
             model_kwargs["prompt"] = custom_prompt
         if task == "zero-shot":
             return OpenAIZeroShotClassifier(**model_kwargs)
@@ -66,7 +65,9 @@ def prepare_model(
         # We assume the model is from HuggingFace
         model_type = get_model_type(model)
         model_kwargs = dict(model_name=model, device=device)
-        if (custom_prompt is not None) and (model_type in ["text2text", "generative"]):
+        if (custom_prompt is not None) and (
+            model_type in ["text2text", "generative"]
+        ):
             model_kwargs["prompt"] = custom_prompt
         if model_type == "text2text":
             if task == "zero-shot":
@@ -100,7 +101,11 @@ def find_example_indices(
 ) -> pd.Index:
     """Finds N random examples of each label in the data set and
     returns the indices of these."""
-    return data.groupby(column).sample(n_examples_per_class, random_state=seed).index
+    return (
+        data.groupby(column)
+        .sample(n_examples_per_class, random_state=seed)
+        .index
+    )
 
 
 def load_data(in_file: str) -> pd.DataFrame:
@@ -170,7 +175,9 @@ def run_config(config: Config) -> None:
 
     print("Saving predictions.")
     model_file = model_name.replace("/", "-")
-    out_path = Path(out_dir).joinpath(f"{task}_pred_{y_column}_{model_file}.csv")
+    out_path = Path(out_dir).joinpath(
+        f"{task}_pred_{y_column}_{model_file}.csv"
+    )
     data.to_csv(out_path)
     print("DONE")
 
