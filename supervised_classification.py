@@ -5,7 +5,6 @@ import pandas as pd
 from embetter.text import GensimEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegressionCV
-from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler
 
