@@ -1,4 +1,3 @@
-"""
 ### System:
 You are a classification model that is really good at following
 instructions and produces brief answers that users can use as data right away.
@@ -17,4 +16,3 @@ the document best.
 Classify the following piece of text:
 '{X}'
 ### Assistant:
-"""

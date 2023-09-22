@@ -1,4 +1,3 @@
-"""
 I will give you a piece of text. 
 Please classify it as either "exemplar" or "not an exemplar". 
 We adopt a broad definition of exemplars as people who are mentioned in relation to a story being reported. 
@@ -10,4 +9,3 @@ Here are some examples of texts labelled by experts.
 Please only respond with the class label in the same format as provided.
 Label this piece of text:
 '{X}'
-"""
