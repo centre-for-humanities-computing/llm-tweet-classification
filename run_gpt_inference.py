@@ -1,5 +1,4 @@
 from contextlib import redirect_stderr, redirect_stdout
-from multiprocessing import Pool
 from pathlib import Path
 
 from confection import Config
@@ -20,12 +19,10 @@ def main():
     log_dir = Path("gpt_runs_logfiles/")
     log_dir.mkdir(exist_ok=True)
     print("Collecting configs and log paths.")
-    configs = []
-    log_paths = []
     for model in ["gpt-4", "gpt-3.5-turbo"]:
         for prompt_type in ["custom", "generic"]:
             for column in ["political", "exemplar"]:
-                for task in ["zero", "few"]:
+                for task in ["zero-shot", "few-shot"]:
                     config = default_config.copy()
                     config["paths"]["out_dir"] = f"predictions_{prompt_type}/"
                     if prompt_type == "custom":
@@ -33,16 +30,18 @@ def main():
                             "prompt_file"
                         ] = f"prompts/gpt_{task}_{column}.txt"
                     config["model"]["name"] = model
+                    config["model"]["task"] = task
                     config["inference"]["y_column"] = column
-                    configs.append(config)
-                    log_paths.append(
-                        log_dir.joinpath(
-                            f"{model}_{prompt_type}_{column}_{zero}-shot.log"
-                        )
+                    log_path = log_dir.joinpath(
+                        f"{model}_{prompt_type}_{column}_{task}.log"
                     )
-    print("Running all jobs in parallel with processes.")
-    with Pool(processes=None) as pool:
-        pool.starmap(run_log_config, zip(configs, log_paths))
+                    print(
+                        f"Running Inference with {model}\n"
+                        f" - task: {task}\n"
+                        f"- prompt: {prompt_type}\n"
+                        f" - column: {column}"
+                    )
+                    run_log_config(config, str(log_path))
     print("DONE")
 
 
