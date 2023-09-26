@@ -51,7 +51,7 @@ def prepare_model(
         model_kwargs: dict[str, Any] = dict(model_name=model)
         if "gpt-4" in model:
             model_kwargs["max_requests_per_minute"] = 200
-            model_kwargs["max_tokens_per_minute"] = 40_000
+            model_kwargs["max_tokens_per_minute"] = 20_000
         else:
             model_kwargs["max_requests_per_minute"] = 3500
             model_kwargs["max_tokens_per_minute"] = 90_000
