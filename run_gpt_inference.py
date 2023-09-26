@@ -32,16 +32,15 @@ def main():
                     config["model"]["name"] = model
                     config["model"]["task"] = task
                     config["inference"]["y_column"] = column
-                    log_path = log_dir.joinpath(
-                        f"{model}_{prompt_type}_{column}_{task}.log"
-                    )
                     print(
+                        "------------------------------\n"
                         f"Running Inference with {model}\n"
                         f" - task: {task}\n"
-                        f"- prompt: {prompt_type}\n"
-                        f" - column: {column}"
+                        f" - prompt: {prompt_type}\n"
+                        f" - column: {column}\n"
+                        "------------------------------"
                     )
-                    run_log_config(config, str(log_path))
+                    run_config(config)
     print("DONE")
 
 
