@@ -2,22 +2,17 @@
 large language models and transformers."""
 import argparse
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
-from stormtrooper import (
-    GenerativeFewShotClassifier,
-    GenerativeZeroShotClassifier,
-    OpenAIFewShotClassifier,
-    OpenAIZeroShotClassifier,
-    SetFitFewShotClassifier,
-    SetFitZeroShotClassifier,
-    Text2TextFewShotClassifier,
-    Text2TextZeroShotClassifier,
-    ZeroShotClassifier,
-)
+from stormtrooper import (GenerativeFewShotClassifier,
+                          GenerativeZeroShotClassifier,
+                          OpenAIFewShotClassifier, OpenAIZeroShotClassifier,
+                          SetFitFewShotClassifier, SetFitZeroShotClassifier,
+                          Text2TextFewShotClassifier,
+                          Text2TextZeroShotClassifier, ZeroShotClassifier)
 from transformers import AutoConfig
 
 
@@ -53,7 +48,13 @@ def prepare_model(
 ) -> ClassifierMixin:
     """Loads classifier model based on model name and task."""
     if ("gpt-3" in model) or ("gpt-4" in model):
-        model_kwargs = dict(model_name=model)
+        model_kwargs: dict[str, Any] = dict(model_name=model)
+        if "gpt-4" in model:
+            model_kwargs["max_requests_per_minute"] = 200
+            model_kwargs["max_tokens_per_minute"] = 40_000
+        else:
+            model_kwargs["max_requests_per_minute"] = 3500
+            model_kwargs["max_tokens_per_minute"] = 90_000
         print("Initializing connection to OpenAI")
         if custom_prompt is not None:
             model_kwargs["prompt"] = custom_prompt
