@@ -9,8 +9,8 @@ from contextlib import redirect_stdout
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="LLM Classification Evaluation")
-    parser.add_argument("-df", "--in_dir", type=str, default="predictions/")
-    parser.add_argument("-of", "--out_dir", type=str, default="output/")
+    parser.add_argument("--in_dir", type=str, default="predictions/")
+    parser.add_argument("--out_dir", type=str, default="output/")
     return parser
 
 def produce_report(data: pd.DataFrame, column: str) -> pd.DataFrame:

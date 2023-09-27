@@ -36,8 +36,8 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "stabilityai-StableBeluga-13B",
         "gpt-3.5-turbo",
         "gpt-4",
-        "distilbert",
-        "glove200d",
+        "distilbert-base-uncased",
+        "glove-twitter-200",
     ]
 
     short_names = [
@@ -120,21 +120,6 @@ def main():
 
     data_name = Path(args.data_dir).name
     df = pd.read_csv(f"output/{data_name}_outputs.csv")
-
-    supervised_data = pd.DataFrame(
-        {
-            "Unnamed: 0": ["accuracy", "political", "accuracy", "political", "accuracy", "exemplar", "accuracy", "exemplar"],
-            "precision": [0.86, 0.86, 0.86, 0.86, _, _, 0.62, 0.62],
-            "recall": [0.86, 0.86, 0.8, 0.8, _, _, 0.76, 0.76],
-            "f1-score": [0.87, 0.87, 0.83, 0.83, _, _, 0.68, 0.68],
-            "support": [0.87, 0.87, 0.83, 0.83, _, _, 0.69, 0.69],
-            "models": ["distilbert", "distilbert", "glove200d", "glove200d"]*2,
-            "tasks": ["supervised"] * 8,
-            "columns": ["political"] * 8,
-        }
-    )
-
-    df = pd.concat([df, supervised_data])
 
     df = clean_dataframe(df)
 
