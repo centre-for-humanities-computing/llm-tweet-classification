@@ -5,6 +5,7 @@ import pandas as pd
 from embetter.text import GensimEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegressionCV
+from sklearn.metrics import f1_score, recall_score, precision_score, make_scorer
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import ShuffleSplit
 from sklearn.pipeline import Pipeline, make_pipeline
@@ -26,18 +27,6 @@ def glove_pipeline(seed: int) -> Pipeline:
     return cls_pipe
 
 
-def train_test_indices(
-    data: pd.DataFrame,
-    seed: int,
-    train_size: float = 0.8,
-):
-    index = np.copy(data.index)
-    np.random.default_rng(seed).shuffle(index)
-    split_at = int(train_size * len(index))
-    train_index, test_index = index[:split_at], index[split_at:]
-    return train_index, test_index
-
-
 def main(seed: int = 0):
     print("Building pipelines")
     pipelines = {
@@ -50,7 +39,7 @@ def main(seed: int = 0):
     print("Loading data.")
     data = pd.read_csv("labelled_data.csv")
     cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=seed)
-    scores = ["accuracy", "f1", "precision", "recall"]
+    scoring = ["accuracy", f1_score, recall_score, precision_score]
 
     out_dir = Path("predictions")
     out_dir.mkdir(exist_ok=True)
@@ -62,12 +51,25 @@ def main(seed: int = 0):
 
             X = data["raw_text"]
             y = data[outcome]
-            scores = cross_validate(classifier, X, y, scoring=scores, cv=cv)
+
+            print("initializing scorer")
+
+            all_scores = pd.DataFrame()
+            for score in scoring:
+                print(f"doing the cv for score: {score}")
+
+                if score == "accuracy":
+                    cv_scores = cross_validate(classifier, X, y, scoring=score, cv=cv)
+                else:
+                    custom_scorer = make_scorer(score, pos_label=outcome)
+                    cv_scores = cross_validate(classifier, X, y, scoring=custom_scorer, cv=cv)
+
+                all_scores[str(score)] = cv_scores['test_score']
 
             out_path = out_dir.joinpath(f"cv_scores_{outcome}_{model}.csv")
 
-            cv_scores_df = pd.DataFrame(scores)
-            cv_scores_df.to_csv(out_path)
+            print("saving the output")
+            all_scores.to_csv(out_path)
 
     print("DUN")
 
