@@ -5,6 +5,8 @@ import pandas as pd
 from embetter.text import GensimEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegressionCV
+from sklearn.model_selection import cross_validate
+from sklearn.model_selection import ShuffleSplit
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -47,9 +49,9 @@ def main(seed: int = 0):
 
     print("Loading data.")
     data = pd.read_csv("labelled_data.csv")
-    train_idx, test_idx = train_test_indices(data, seed=seed, train_size=0.8)
-    data["train_test_set"] = "test"
-    data["train_test_set"][train_idx] = "train"
+    cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=seed)
+    scores = ["accuracy", "f1", "precision", "recall"]
+
     out_dir = Path("predictions")
     out_dir.mkdir(exist_ok=True)
 
@@ -57,15 +59,16 @@ def main(seed: int = 0):
         for model in pipelines.keys():
             print(f"Supervised classification with {model} over {outcome}")
             classifier = pipelines[model]()
-            X_train = data["raw_text"].loc[train_idx]
-            y_train = data[outcome].loc[train_idx]
-            classifier.fit(X_train, y_train)
-            pred_data = data.copy()
-            pred_data[f"pred_{outcome}"] = classifier.predict(data["raw_text"])
-            out_path = out_dir.joinpath(
-                f"supervised_pred_{outcome}_{model}.csv"
-            )
-            pred_data.to_csv(out_path)
+
+            X = data["raw_text"]
+            y = data[outcome]
+            scores = cross_validate(classifier, X, y, scoring=scores, cv=cv)
+
+            out_path = out_dir.joinpath(f"cv_scores_{outcome}_{model}.csv")
+
+            cv_scores_df = pd.DataFrame(scores)
+            cv_scores_df.to_csv(out_path)
+
     print("DUN")
 
 
