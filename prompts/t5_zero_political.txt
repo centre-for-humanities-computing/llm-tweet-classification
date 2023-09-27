@@ -1,5 +1,5 @@
 I will give you a piece of text. 
-Please classify it as either "political" or "apolitical". 
+Please classify it into one of the following classes: {classes}.
 Political content is defined as content that references a candidate, political party, elected or appointed government official, 
 election, referendum, ballot measure, legislation, regulation, directive, or judicial outcome. 
 Political content includes all statements with a political substance, 

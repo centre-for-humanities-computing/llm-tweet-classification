@@ -1,5 +1,5 @@
 I will give you a piece of text. 
-Please classify it as either "exemplar" or "not an exemplar". 
+Please classify it into one of the following classes: {classes}.
 We adopt a broad definition of exemplars as people who are mentioned in relation to a story being reported. 
 They can be people directly affected and involved in the issue, or they may simply be commenting (in the form of a quote) on the issue or story.
 
