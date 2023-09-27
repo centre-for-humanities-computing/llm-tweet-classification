@@ -19,13 +19,6 @@ from plotnine import (
 )
 
 
-def create_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="LLM Classification Plotting")
-    parser.add_argument("--data_dir", type=str, default="predictions/")
-
-    return parser
-
-
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.rename(columns={"Unnamed: 0": "label"})
 
@@ -54,6 +47,12 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
     df["models"] = df["models"].cat.rename_categories(short_names)
 
+    df["tasks"] = (
+                df["tasks"]
+                .astype("category")
+                .cat.reorder_categories([ "zero-shot", "few-shot","supervised"])
+            )
+
     return df
 
 
@@ -67,10 +66,10 @@ def make_f1_fig(df: pd.DataFrame):
     f1_fig = (
         ggplot(subset, aes("models", "f1-score", color="tasks", group="tasks"))
         + geom_point(position = position_dodge(width = 0.1))
-        + facet_grid("~columns")
+        + facet_grid("prompt~columns")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
-        + theme(axis_text_x=element_text(rotation=10))
+        + theme(axis_text_x=element_text(rotation=90))
     )
 
     return f1_fig
@@ -86,10 +85,10 @@ def make_acc_fig(df: pd.DataFrame):
         ggplot(subset, aes("models", "support", color="tasks", group="tasks"))
         + geom_point(position = position_dodge(width = 0.1))
         + geom_hline(yintercept=0.5)
-        + facet_grid("~columns")
+        + facet_grid("prompt~columns")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
-        + theme(axis_text_x=element_text(rotation=10))
+        + theme(axis_text_x=element_text(rotation=90))
         + labs(y="Accuracy")
     )
 
@@ -104,8 +103,9 @@ def make_prec_rec_fig(df: pd.DataFrame):
     prec_rec_fig = (
         ggplot(subset, aes("precision", "recall", color="models"))
         + geom_point()
-        + facet_grid("label~tasks")
+        + facet_grid("tasks ~ label + prompt")
         + theme_bw()
+        + theme(axis_text_x=element_text(rotation=20))
         + scale_x_continuous(limits=[0, 1])
         + scale_y_continuous(limits=[0, 1])
         + scale_color_brewer(type="qual", palette=2)
@@ -115,27 +115,30 @@ def make_prec_rec_fig(df: pd.DataFrame):
 
 
 def main():
-    parser = create_parser()
-    args = parser.parse_args()
+    paths = ["predictions", "predictions_custom"]
 
-    data_name = Path(args.data_dir).name
-    df = pd.read_csv(f"output/{data_name}_outputs.csv")
+    full_df = pd.DataFrame()
 
-    df = clean_dataframe(df)
+    for path in paths:
+        df = pd.read_csv(f"output/{path}_outputs.csv")
 
-    df["tasks"] = (
-        df["tasks"]
-        .astype("category")
-        .cat.reorder_categories(["supervised", "few-shot", "zero-shot"])
-    )
+        if path == "predictions":
+            df['prompt'] = "generic"
 
-    f1_figure = make_f1_fig(df)
-    acc_figure = make_acc_fig(df)
-    prec_rec_figure = make_prec_rec_fig(df)
+        elif path == "predictions_custom":
+            df['prompt'] = "custom"
 
-    Path(f"{data_name}_figures").mkdir(exist_ok=True)
+        full_df = pd.concat([full_df, df])
 
-    out_path = f"{data_name}_figures/"
+    full_df = clean_dataframe(full_df)
+
+    f1_figure = make_f1_fig(full_df)
+    acc_figure = make_acc_fig(full_df)
+    prec_rec_figure = make_prec_rec_fig(full_df)
+    
+    out_path = "figures/"
+
+    Path(out_path).mkdir(exist_ok=True)
 
     f1_figure.save(f"{out_path}f1_figure.png", dpi=300)
     acc_figure.save(f"{out_path}acc_figure.png", dpi=300)
