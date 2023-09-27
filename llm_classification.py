@@ -7,12 +7,17 @@ from typing import Any, Literal, Optional
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
-from stormtrooper import (GenerativeFewShotClassifier,
-                          GenerativeZeroShotClassifier,
-                          OpenAIFewShotClassifier, OpenAIZeroShotClassifier,
-                          SetFitFewShotClassifier, SetFitZeroShotClassifier,
-                          Text2TextFewShotClassifier,
-                          Text2TextZeroShotClassifier, ZeroShotClassifier)
+from stormtrooper import (
+    GenerativeFewShotClassifier,
+    GenerativeZeroShotClassifier,
+    OpenAIFewShotClassifier,
+    OpenAIZeroShotClassifier,
+    SetFitFewShotClassifier,
+    SetFitZeroShotClassifier,
+    Text2TextFewShotClassifier,
+    Text2TextZeroShotClassifier,
+    ZeroShotClassifier,
+)
 from transformers import AutoConfig
 
 
@@ -54,7 +59,7 @@ def prepare_model(
             model_kwargs["max_tokens_per_minute"] = 20_000
         else:
             model_kwargs["max_requests_per_minute"] = 3500
-            model_kwargs["max_tokens_per_minute"] = 90_000
+            model_kwargs["max_tokens_per_minute"] = 45_000
         print("Initializing connection to OpenAI")
         if custom_prompt is not None:
             model_kwargs["prompt"] = custom_prompt
