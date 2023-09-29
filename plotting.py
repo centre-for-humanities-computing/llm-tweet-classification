@@ -1,4 +1,6 @@
 import argparse
+from glob import glob
+
 import pandas as pd
 from pathlib import Path
 from plotnine import (
@@ -20,7 +22,7 @@ from plotnine import (
 
 
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.rename(columns={"Unnamed: 0": "label"})
+    df = df.rename(columns={"Unnamed: 0": "label", "support": "accuracy"})
 
     model_order = [
         "sentence-transformers-all-MiniLM-L6-v2",
@@ -41,17 +43,19 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "gpt-3.5-turbo",
         "gpt4",
         "distilbert",
-        "glove200d",
+        "glove200",
     ]
 
-    df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
+    df["models"] = pd.Categorical(
+        df["models"], ordered=True, categories=model_order
+    )
     df["models"] = df["models"].cat.rename_categories(short_names)
 
     df["tasks"] = (
-                df["tasks"]
-                .astype("category")
-                .cat.reorder_categories([ "zero-shot", "few-shot","supervised"])
-            )
+        df["tasks"]
+        .astype("category")
+        .cat.reorder_categories(["zero-shot", "few-shot", "supervised"])
+    )
 
     return df
 
@@ -65,7 +69,7 @@ def make_f1_fig(df: pd.DataFrame):
 
     f1_fig = (
         ggplot(subset, aes("models", "f1-score", color="tasks", group="tasks"))
-        + geom_point(position = position_dodge(width = 0.1))
+        + geom_point(position=position_dodge(width=0.1))
         + facet_grid("prompt~columns")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
@@ -79,11 +83,13 @@ def make_acc_fig(df: pd.DataFrame):
     options = ["accuracy"]
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
-    subset = subset.loc[(subset["columns"] == "political") | (subset["columns"] == "exemplar")] 
+    subset = subset.loc[
+        (subset["columns"] == "political") | (subset["columns"] == "exemplar")
+    ]
 
     acc_fig = (
-        ggplot(subset, aes("models", "support", color="tasks", group="tasks"))
-        + geom_point(position = position_dodge(width = 0.1))
+        ggplot(subset, aes("models", "accuracy", color="tasks", group="tasks"))
+        + geom_point(position=position_dodge(width=0.1))
         + geom_hline(yintercept=0.5)
         + facet_grid("prompt~columns")
         + theme_bw()
@@ -123,19 +129,46 @@ def main():
         df = pd.read_csv(f"output/{path}_outputs.csv")
 
         if path == "predictions":
-            df['prompt'] = "generic"
+            df["prompt"] = "generic"
 
         elif path == "predictions_custom":
-            df['prompt'] = "custom"
+            df["prompt"] = "custom"
 
         full_df = pd.concat([full_df, df])
 
     full_df = clean_dataframe(full_df)
 
+    cv_files = glob(("output/cv_scores*.csv"))
+
+    for file in cv_files:
+        _, _, column, model = file.split("_")
+
+        cv_df = pd.read_csv(file)
+
+        cv_df = cv_df.rename(
+            columns={
+                "<function f1_score at 0x7fca2d966200>": "f1-score",
+                "<function recall_score at 0x7fca2d966950>": "recall",
+                "<function precision_score at 0x7fca2d966830>": "precision",
+                'Unnamed: 0': 'k-fold'
+            }
+        )
+        cv_df["label"] = column
+        cv_df["tasks"] = "supervised"
+        cv_df["columns"] = column
+        cv_df['prompt'] = "generic"
+
+        if "glove" in model:
+            cv_df['models'] = "glove200"
+        elif "bert" in model:
+            cv_df['models'] = "distilbert"
+
+        full_df = pd.concat([full_df, cv_df])
+
     f1_figure = make_f1_fig(full_df)
     acc_figure = make_acc_fig(full_df)
     prec_rec_figure = make_prec_rec_fig(full_df)
-    
+
     out_path = "figures/"
 
     Path(out_path).mkdir(exist_ok=True)
