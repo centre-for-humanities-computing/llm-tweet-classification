@@ -41,7 +41,7 @@ def main(seed: int = 0):
     cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=seed)
     scoring = ["accuracy", f1_score, recall_score, precision_score]
 
-    out_dir = Path("predictions")
+    out_dir = Path("output")
     out_dir.mkdir(exist_ok=True)
 
     for outcome in ["political", "exemplar"]:
