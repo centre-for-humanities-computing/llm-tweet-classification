@@ -61,16 +61,30 @@ def reorder_tasks(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def clean_cv_df(df: pd.DataFrame, model: str, column: str):
-    df = df.rename(
-        columns={
-            "<function f1_score at 0x7fca2d966200>": "f1-score",
-            "<function recall_score at 0x7fca2d966950>": "recall",
-            "<function precision_score at 0x7fca2d966830>": "precision",
-            "Unnamed: 0": "k-fold",
-        }
-    )
+def add_acc_rows(df: pd.DataFrame) -> pd.DataFrame:
+
+    for acc_score in df['accuracy'].unique():
+        new_row = {'label': 'accuracy', 'accuracy': acc_score}
+        df.loc[len(df)] = new_row
+
+    return df
+
+
+def clean_cv_df(df: pd.DataFrame, model: str, column: str) -> pd.DataFrame:
+    # creating label column first as that is needed for add_acc_rows func
     df['label'] = column
+
+    # adding accuracy rows for the accuracy plot
+    df = add_acc_rows(df)
+
+    # renaming 
+    df = df.rename(
+    columns={
+        "f1_score": "f1-score",
+        "recall_score": "recall",
+        "precision_score": "precision"        }
+)
+    # adding new columns
     df["tasks"] = "supervised"
     df["columns"] = column
     df["prompt"] = "generic"
@@ -103,14 +117,9 @@ def make_acc_fig(df: pd.DataFrame):
     # selecting rows based on condition
     subset = df[df["label"].isin(options)]
 
-    subset = subset.loc[
-        (subset["columns"] == "political") | (subset["columns"] == "exemplar")
-    ]
-
     acc_fig = (
         ggplot(subset, aes("models", "accuracy", color="tasks", group="tasks"))
         + geom_point(position=position_dodge(width=0.1))
-        + geom_hline(yintercept=0.5)
         + facet_grid("prompt~columns")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
@@ -166,7 +175,7 @@ def main():
         cv_df = pd.read_csv(file)
 
         cv_df = clean_cv_df(cv_df, model, column)
-
+        
         full_df = pd.concat([full_df, cv_df])
 
     full_df = reorder_models(full_df)
