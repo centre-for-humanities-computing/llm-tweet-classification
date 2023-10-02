@@ -173,7 +173,6 @@ def main():
     for file in cv_files:
         _, _, column, model = str(Path(file).stem).split("_")
         cv_df = pd.read_csv(file)
-        cv_df = add_acc_rows(cv_df)
 
         cv_df = clean_cv_df(cv_df, model, column)
         
