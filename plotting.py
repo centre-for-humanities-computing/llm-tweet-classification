@@ -67,8 +67,7 @@ def create_accuracy_column(df):
 
     # filter for only accuracy rows
     df_acc = df.loc[df["outcome"] == "accuracy"]
-    print(df_acc["accuracy"])
-
+    
     # filter for only positive labels
     df = df.loc[
         (df["outcome"] == "political") | (df["outcome"] == "exemplar")
