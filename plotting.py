@@ -61,49 +61,46 @@ def reorder_tasks(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def add_acc_rows(df: pd.DataFrame) -> pd.DataFrame:
+def create_accuracy_column(df):
+    # rename columns
+    df = df.rename(columns={"Unnamed: 0": "outcome", "support": "accuracy"})
 
-    for acc_score in df['accuracy'].unique():
-        new_row = {'label': 'accuracy', 'accuracy': acc_score}
-        df.loc[len(df)] = new_row
+    # filter for only accuracy rows
+    df_acc = df.loc[df["outcome"] == "accuracy"]
+    print(df_acc["accuracy"])
+
+    # filter for only positive labels
+    df = df.loc[
+        (df["outcome"] == "political") | (df["outcome"] == "exemplar")
+    ]
+
+    # add the new accuracy column to the rest of the data 
+    df['accuracy'] = df_acc['accuracy'].values
 
     return df
 
 
-def clean_cv_df(df: pd.DataFrame, model: str, column: str) -> pd.DataFrame:
-    # creating label column first as that is needed for add_acc_rows func
-    df['label'] = column
-
-    # adding accuracy rows for the accuracy plot
-    df = add_acc_rows(df)
-
-    # renaming 
-    df = df.rename(
-    columns={
-        "f1_score": "f1-score",
-        "recall_score": "recall",
-        "precision_score": "precision"        }
-)
+def clean_cv_df(df: pd.DataFrame) -> pd.DataFrame:
+    # renaming
+    df = df.rename(columns={"model": "models"})
     # adding new columns
     df["tasks"] = "supervised"
-    df["columns"] = column
     df["prompt"] = "generic"
-    df["models"] = model
 
     return df
 
 
 def make_f1_fig(df: pd.DataFrame):
+    #print(df['outcome'].unique)
     options = ["political", "exemplar"]
 
     # selecting rows based on condition
-
-    subset = df[df["label"].isin(options)]
+    subset = df[df["outcome"].isin(options)]
 
     f1_fig = (
         ggplot(subset, aes("models", "f1-score", color="tasks", group="tasks"))
         + geom_point(position=position_dodge(width=0.1))
-        + facet_grid("prompt~columns")
+        + facet_grid("prompt~outcome")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
         + theme(axis_text_x=element_text(rotation=90))
@@ -113,18 +110,14 @@ def make_f1_fig(df: pd.DataFrame):
 
 
 def make_acc_fig(df: pd.DataFrame):
-    options = ["accuracy"]
-    # selecting rows based on condition
-    subset = df[df["label"].isin(options)]
-
     acc_fig = (
-        ggplot(subset, aes("models", "accuracy", color="tasks", group="tasks"))
+        ggplot(df, aes("models", "accuracy", color="tasks", group="tasks"))
         + geom_point(position=position_dodge(width=0.1))
-        + facet_grid("prompt~columns")
+        + facet_grid("prompt~outcome")
         + theme_bw()
         + scale_color_brewer(type="qual", palette="Dark2")
-        + theme(axis_text_x=element_text(rotation=90))    
-        )
+        + theme(axis_text_x=element_text(rotation=90))
+    )
 
     return acc_fig
 
@@ -132,12 +125,12 @@ def make_acc_fig(df: pd.DataFrame):
 def make_prec_rec_fig(df: pd.DataFrame):
     options = ["political", "exemplar"]
     # selecting rows based on condition
-    subset = df[df["label"].isin(options)]
+    subset = df[df["outcome"].isin(options)]
 
     prec_rec_fig = (
-        ggplot(subset, aes("precision", "recall", color="models"))
+        ggplot(df, aes("precision", "recall", color="models"))
         + geom_point()
-        + facet_grid("tasks ~ label + prompt")
+        + facet_grid("tasks ~ outcome + prompt")
         + theme_bw()
         + theme(axis_text_x=element_text(rotation=20))
         + scale_x_continuous(limits=[0, 1])
@@ -151,7 +144,7 @@ def make_prec_rec_fig(df: pd.DataFrame):
 def main():
     paths = ["predictions", "predictions_custom"]
 
-    full_df = pd.DataFrame()
+    llm_df = pd.DataFrame()
 
     for path in paths:
         df = pd.read_csv(f"output/{path}_outputs.csv")
@@ -162,21 +155,14 @@ def main():
         elif path == "predictions_custom":
             df["prompt"] = "custom"
 
-        full_df = pd.concat([full_df, df])
+        llm_df = pd.concat([llm_df, df])
 
-    full_df = full_df.rename(
-        columns={"Unnamed: 0": "label", "support": "accuracy"}
-    )
+    llm_df = create_accuracy_column(llm_df)
 
-    cv_files = glob(("output/cv_scores*.csv"))
+    cv_df = pd.read_csv("output/cv_scores_supervised.csv")
+    cv_df = clean_cv_df(cv_df)
 
-    for file in cv_files:
-        _, _, column, model = str(Path(file).stem).split("_")
-        cv_df = pd.read_csv(file)
-
-        cv_df = clean_cv_df(cv_df, model, column)
-        
-        full_df = pd.concat([full_df, cv_df])
+    full_df = pd.concat([cv_df, llm_df])
 
     full_df = reorder_models(full_df)
     full_df = reorder_tasks(full_df)
