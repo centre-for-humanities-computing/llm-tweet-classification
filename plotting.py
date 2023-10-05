@@ -1,3 +1,4 @@
+import argpars
 from glob import glob
 from pathlib import Path
 
@@ -18,6 +19,12 @@ from plotnine import (
     theme,
     element_text,
 )
+
+
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="LLM Classification Evaluation")
+    parser.add_argument("--in_dir", type=str, default="output/")
+    return parser
 
 
 def reorder_models(df: pd.DataFrame) -> pd.DataFrame:
@@ -43,9 +50,7 @@ def reorder_models(df: pd.DataFrame) -> pd.DataFrame:
         "glove200",
     ]
 
-    df["models"] = pd.Categorical(
-        df["models"], ordered=True, categories=model_order
-    )
+    df["models"] = pd.Categorical(df["models"], ordered=True, categories=model_order)
     df["models"] = df["models"].cat.rename_categories(short_names)
 
     return df
@@ -67,14 +72,12 @@ def create_accuracy_column(df):
 
     # filter for only accuracy rows
     df_acc = df.loc[df["outcome"] == "accuracy"]
-    
-    # filter for only positive labels
-    df = df.loc[
-        (df["outcome"] == "political") | (df["outcome"] == "exemplar")
-    ]
 
-    # add the new accuracy column to the rest of the data 
-    df['accuracy'] = df_acc['accuracy'].values
+    # filter for only positive labels
+    df = df.loc[(df["outcome"] == "political") | (df["outcome"] == "exemplar")]
+
+    # add the new accuracy column to the rest of the data
+    df["accuracy"] = df_acc["accuracy"].values
 
     return df
 
@@ -90,7 +93,7 @@ def clean_cv_df(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def make_f1_fig(df: pd.DataFrame):
-    #print(df['outcome'].unique)
+    # print(df['outcome'].unique)
     options = ["political", "exemplar"]
 
     # selecting rows based on condition
@@ -141,12 +144,15 @@ def make_prec_rec_fig(df: pd.DataFrame):
 
 
 def main():
+    parser = create_parser()
+    args = parser.parse_args()
+
     paths = ["predictions", "predictions_custom"]
 
     llm_df = pd.DataFrame()
 
     for path in paths:
-        df = pd.read_csv(f"output/{path}_outputs.csv")
+        df = pd.read_csv(f"{args.in_dir}/{path}_outputs.csv")
 
         if path == "predictions":
             df["prompt"] = "generic"
