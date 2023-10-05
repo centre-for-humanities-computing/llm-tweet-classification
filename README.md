@@ -16,7 +16,7 @@ HuggingFace or OpenAI.
 If you intend to use OpenAI models, you will have to specify your API key and ORG as environment variables.
 
 ```bash
-export OPENAI_KEY="..."
+export OPENAI_API_KEY="..."
 export OPENAI_ORG="..."
 ```
 
@@ -72,26 +72,6 @@ python3 llm_classification.py "config.cfg"
     - y_column: `str` - Name of dependent variable in the table.
     - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
 
-### Containerized Inference
-
-We provide a Docker image that comes with all dependencies pre-packaged including CUDA drivers. 
-The container relies on a single config file, and you will have to mount all directories and files that you wish
-to keep on your local disk.
-When run, the container reads from "/config.cfg" (No default is provided, you have to mount.)
-and outputs logs to "logs.txt" (If you don't mount this will just remain inside the container.)
-every other parameter is read from the single config file.
-
-Here's an example of how you would go about this:
-
-```bash
-sudo docker pull "miscodisco/llm-tweet-classification"
-sudo docker run -d \
-    --mount type=bind,source="$(pwd)/config.cfg",target="/config.cfg" \
-    --mount type=bind,source="$(pwd)/logs.txt",target="/logs.txt" \
-    --mount type=bind,source="$(pwd)/predictions/",target="/predictions/" \
-    --mount type=bind,source="$(pwd)/labelled_data.csv",target="/labelled_data.csv" \
-    "miscodisco/llm-tweet-classification" 
-```
 
 ## Output
 
