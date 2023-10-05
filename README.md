@@ -72,22 +72,13 @@ python3 llm_classification.py "config.cfg"
     - y_column: `str` - Name of dependent variable in the table.
     - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
 
-## OpenAI script
-
-For ease of use we have developed a script that generates predictions for all OpenAI models in one run. We did this, because OpenAI inference can run on low performance instances, as such it isn't a problem if it takes a long time to run.
-Additionally since all instances access the same API, and there are rate limits, we could not start multiple instances and run them in parallel.
-
-Paths in this script are hardcoded and you might need to adjust it for personal use.
-
-```bash
-python3 run_gpt_inference.py
-```
 
 ## Output
 
 This will output a table with predictions added to the `out_dir` folder in the config.
 
 The file name format is as follows:
+
 ```python
 f"predictions/{task}_pred_{column}_{model}.csv"
 ```
@@ -96,26 +87,30 @@ Each table will have a `pred_<y_column>` and also a `train_test_set` column that
 learning and `test` everywhere else.
 
 ## Evaluating results
-To evaluate the performance of the model(s), you can run the CLI `evaluation.py` script. It has two command line arguments: --data_folder and --output_folder. These, respectively, refer to the folder in which the predictions from the llm_classification.py script has been saved, and the folder where the classification report(s) should be saved. 
+To evaluate the performance of the model(s), you can run the CLI `evaluation.py` script. It has two command line arguments: --in_dir and --out_dir. These, respectively, refer to the folder in which the predictions from the llm_classification.py script has been saved (i.e., your predictions folder), and the folder where the classification report(s) should be saved. 
+--in_dir defaults to 'predictions/' and --out_dir defaults to 'output/' (which is a folder that is created if it does not exist already)
+
 It can be run as follows:
+
 ```python
-python3 evaluation.py -df "your/data/path" -of "your/out/path"
+python3 evaluation.py --in_dir "your/data/path" --out_dir "your/out/path"
 ```
+
 It expects the output file(s) from `llm_classification.py` in the specified file name format and placement. 
 It will output two files to the specified out folder: 
-- a txt file with the classification report for the test data for each of the files in the `predictions/` folder. 
+- a txt file with the classification report for the test data for each of the files in the --in_dir folder. 
 - a csv file with the same information as the txt file, but which can be used for plotting the results. 
 
 ## Plotting results
 The `plotting.py` script takes the csv-file produced by the evaluation script and makes three plots:
-- acc_figure.png: The accuracy for each of the models in each task (zero-shot and few-shot) with the grey line indicating 50% (chance level) It's split into two, with the left side being the political column and the right being exemplar. 
-- f1_figure.png: The f1-score for positive labels for each model in each task – again split into political and exemplar. 
-- prec_rec_figure.png: Precision plotted against recall for each of the models, split into two rows and two columns. Rows indicate task (zero-shot, few-shot), columns indiciate label column (political, exemplar)
+- acc_figure.png: The accuracy for each of the 8 models on each outcome (political, exemplar) in each task (zero-shot, few-shot) with each prompt type (generic, custom). It's split into four quadrants, with the left side being the exemplar column, the right being political, the upper line being custom prompts and the lower column being generic prompts. 
+- f1_figure.png: The f1-score for positive labels for each model in each task – again split into political and exemplar + generic and custom prompt. 
+- prec_rec_figure.png: Precision plotted against recall for each of the models, split into three rows and four columns. Rows indicate task (zero-shot, few-shot, supervised classification), columns indiciate label column (political, exemplar) and prompt type (generic, custom)
 
-It has a single command line argument: --data_folder. This should be the same as the one specified when running the evaluation.py script. Examples: 
+
 ```python
-python3 plotting.py -df "your/data/path"  
+python3 plotting.py
 ```
 
 
-These are all saved in a new figures folder which adds #_figures# to the final data_folders name. 
+These are all saved in a figures/ folder.
