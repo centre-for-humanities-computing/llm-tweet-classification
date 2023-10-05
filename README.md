@@ -1,5 +1,11 @@
 # llm-tweet-classification
-Classifying tweets with large language models with zero- and few-shot learning.
+Classifying tweets with large language models with zero- and few-shot learning with custom and generic prompts, as well as supervised learning algorithms for comparison.
+
+#### Our results on annotating tweets with labels `exemplar` and `political`:
+
+| F1-scores | Accuracies | Precision-Recall |
+|:---------:|:----------:|:----------------:|
+| ![F1 scores](figures/f1_figure.png) | ![Acc scores](figures/acc_figure.png) | ![prec-rec scores](figures/prec_rec_figure.png) |
 
 ## Getting Started
 
@@ -134,12 +140,10 @@ The `plotting.py` script takes the csv-file produced by the evaluation script an
 - f1_figure.png: The f1-score for positive labels for each model in each task – again split into political and exemplar + generic and custom prompt. 
 - prec_rec_figure.png: Precision plotted against recall for each of the models, split into three rows and four columns. Rows indicate task (zero-shot, few-shot, supervised classification), columns indiciate label column (political, exemplar) and prompt type (generic, custom)
 
-The script takes a single command line argument --in_dir, which is the folder where the csv-files produced by the evaluation script should be found (i.e., the out_dir from evaluation.py). It deafults to output/. 
-Example: 
-```python
-python3 plotting.py --in_dir "your/data/path"
-```
 
+```python
+python3 plotting.py
+```
 
 
 These are all saved in a figures/ folder.
