@@ -1,5 +1,4 @@
-import argpars
-from glob import glob
+import argparse
 from pathlib import Path
 
 import pandas as pd
@@ -7,11 +6,8 @@ from plotnine import (
     ggplot,
     aes,
     geom_point,
-    geom_hline,
-    labs,
     facet_grid,
     theme_bw,
-    geom_text,
     scale_x_continuous,
     scale_y_continuous,
     scale_color_brewer,
