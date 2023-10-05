@@ -1,0 +1,9 @@
+numpy>=1.23.0
+pandas>=2.0.0
+embetter>=0.5.2
+gensim>=4.2.0
+tqdm>=4.66.0
+scikit-learn>=1.2.0
+transformers>=4.23.0
+datasets>=2.14.5
+torch>=2.0.1

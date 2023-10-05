@@ -83,6 +83,23 @@ Paths in this script are hardcoded and you might need to adjust it for personal 
 python3 run_gpt_inference.py
 ```
 
+## Supervised Classification
+
+For supervised models we made a separate script. This includes running and evaluating Glove-200d with logistic regression and finetuning DistilBert for classification.
+
+This script requires different requirements, therefore you should install these from the appropriate file:
+
+```bash
+pip install -r supervised_requirements.txt
+```
+
+Paths in this script are hardcoded and you might need to adjust it for personal use.
+
+```bash
+python3 supervised_classification.py
+```
+
+
 ## Output
 
 This will output a table with predictions added to the `out_dir` folder in the config.
