@@ -72,6 +72,16 @@ python3 llm_classification.py "config.cfg"
     - y_column: `str` - Name of dependent variable in the table.
     - n_examples: `int` - Number of examples to give to few-shot models. Is ignored when `task=="zero-shot"`
 
+## OpenAI script
+
+For ease of use we have developed a script that generates predictions for all OpenAI models in one run. We did this, because OpenAI inference can run on low performance instances, as such it isn't a problem if it takes a long time to run.
+Additionally since all instances access the same API, and there are rate limits, we could not start multiple instances and run them in parallel.
+
+Paths in this script are hardcoded and you might need to adjust it for personal use.
+
+```bash
+python3 run_gpt_inference.py
+```
 
 ## Output
 
