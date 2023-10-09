@@ -67,7 +67,7 @@ def reorder_tasks(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def create_accuracy_column(df):
+def create_accuracy_column(df: pd.DataFrame) -> pd.DataFrame:
     # rename columns
     df = df.rename(columns={"Unnamed: 0": "outcome", "support": "accuracy"})
 
@@ -100,7 +100,7 @@ def capitalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def make_f1_fig(df: pd.DataFrame):
+def make_f1_fig(df: pd.DataFrame) -> ggplot:
     options = ["Political", "Exemplar"]
 
     # selecting rows based on condition
@@ -119,7 +119,7 @@ def make_f1_fig(df: pd.DataFrame):
     return f1_fig
 
 
-def make_acc_fig(df: pd.DataFrame):
+def make_acc_fig(df: pd.DataFrame) -> ggplot:
     acc_fig = (
         ggplot(df, aes("models", "accuracy", color="tasks", group="tasks"))
         + geom_point(position=position_dodge(width=0.1))
@@ -133,7 +133,7 @@ def make_acc_fig(df: pd.DataFrame):
     return acc_fig
 
 
-def make_prec_rec_fig(df: pd.DataFrame):
+def make_prec_rec_fig(df: pd.DataFrame) -> ggplot:
     options = ["Political", "Exemplar"]
     # selecting rows based on condition
     subset = df[df["outcome"].isin(options)]
@@ -164,7 +164,10 @@ def combine_figs(plot1, plot2):
     return g1_g2
 
 
-def col_func(s):
+def col_func(s: str) -> str:
+    """ 
+    make facet labels be Outcome + Prompt
+    """
     if s == "Exemplar" or s == "Political":
         return f"{s} +"
     else:
@@ -199,7 +202,6 @@ def main():
 
     full_df = reorder_models(full_df)
     full_df = reorder_tasks(full_df)
-
     full_df = capitalize_columns(full_df)
 
     f1_figure = make_f1_fig(full_df)
