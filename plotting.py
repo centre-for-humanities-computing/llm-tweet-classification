@@ -42,7 +42,7 @@ def reorder_models(df: pd.DataFrame) -> pd.DataFrame:
         "All-MiniLM-l6",
         "BGE-large",
         "T5-XXL",
-        "StableBeluga-13b",
+        "StableBeluga2-13b",
         "GPT-3.5-turbo",
         "GPT-4",
         "DistilBERT",
@@ -60,8 +60,9 @@ def reorder_models(df: pd.DataFrame) -> pd.DataFrame:
 def reorder_tasks(df: pd.DataFrame) -> pd.DataFrame:
     df["tasks"] = (
         df["tasks"]
+        .str.capitalize()
         .astype("category")
-        .cat.reorder_categories(["zero-shot", "few-shot", "supervised"])
+        .cat.reorder_categories(["Zero-shot", "Few-shot", "Supervised"])
     )
 
     return df
@@ -87,8 +88,8 @@ def clean_cv_df(df: pd.DataFrame) -> pd.DataFrame:
     # renaming
     df = df.rename(columns={"model": "models"})
     # adding new columns
-    df["tasks"] = "supervised"
-    df["prompt"] = "generic"
+    df["tasks"] = "Supervised"
+    df["prompt"] = "Generic"
 
     return df
 
@@ -111,9 +112,10 @@ def make_f1_fig(df: pd.DataFrame) -> ggplot:
         + geom_point(position=position_dodge(width=0.1))
         + facet_grid("prompt~outcome")
         + theme_bw()
+        + scale_y_continuous(limits=[0, 1])
         + scale_color_brewer(type="qual", palette="Dark2")
         + theme(axis_text_x=element_text(rotation=90))
-        + labs(x="Model", y="F1-score", color="Task")
+        + labs(x="Panel B", y="F1-score", color="Task")
     )
 
     return f1_fig
@@ -125,9 +127,10 @@ def make_acc_fig(df: pd.DataFrame) -> ggplot:
         + geom_point(position=position_dodge(width=0.1))
         + facet_grid("prompt~outcome")
         + theme_bw()
+        + scale_y_continuous(limits=[0, 1])
         + scale_color_brewer(type="qual", palette="Dark2")
         + theme(axis_text_x=element_text(rotation=90))
-        + labs(x="Model", y="Accuracy", color="Task")
+        + labs(x="Panel A", y="Accuracy", color="Task")
     )
 
     return acc_fig
@@ -212,10 +215,10 @@ def main():
 
     Path(out_path).mkdir(exist_ok=True)
 
-    f1_acc_fig = combine_figs(f1_figure, acc_figure)
+    f1_acc_fig = combine_figs(acc_figure, f1_figure)
 
-    f1_acc_fig.savefig(f"{out_path}f1_acc_figure.png", dpi=300)
-    prec_rec_figure.save(f"{out_path}prec_rec_figure.png", dpi=300)
+    f1_acc_fig.savefig(f"{out_path}f1_acc_figure_updated.png", dpi=300)
+    prec_rec_figure.save(f"{out_path}prec_rec_figure_updated.png", dpi=300)
 
 
 if __name__ == "__main__":
