@@ -149,8 +149,9 @@ def run_config(config: Config) -> None:
     try:
         examples_path = config["paths"]["examples"]
         examples = pd.read_csv(examples_path)
-        example_ids = examples["id"]
-        train_indices = data[data["id"].isin(example_ids)]
+        X_train = examples["data"]
+        y_train = examples["label"]
+        train_indices = []
     except KeyError:
         print("Preparing training data")
         train_indices = find_example_indices(
@@ -159,13 +160,13 @@ def run_config(config: Config) -> None:
             config["inference"]["n_examples"],
             seed=config["system"]["seed"],
         )
+        X_train = data[x_column][train_indices]
+        y_train = data[y_column][train_indices]
+
     data["train_test_set"] = "test"
 
     if task == "few-shot":
         data["train_test_set"][train_indices] = "train"
-
-    X_train = data[x_column][train_indices]
-    y_train = data[y_column][train_indices]
 
     print("Loading model")
     classifier = prepare_model(
