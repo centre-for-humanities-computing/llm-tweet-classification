@@ -7,17 +7,12 @@ from typing import Any, Literal, Optional
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
-from stormtrooper import (
-    GenerativeFewShotClassifier,
-    GenerativeZeroShotClassifier,
-    OpenAIFewShotClassifier,
-    OpenAIZeroShotClassifier,
-    SetFitFewShotClassifier,
-    SetFitZeroShotClassifier,
-    Text2TextFewShotClassifier,
-    Text2TextZeroShotClassifier,
-    ZeroShotClassifier,
-)
+from stormtrooper import (GenerativeFewShotClassifier,
+                          GenerativeZeroShotClassifier,
+                          OpenAIFewShotClassifier, OpenAIZeroShotClassifier,
+                          SetFitFewShotClassifier, SetFitZeroShotClassifier,
+                          Text2TextFewShotClassifier,
+                          Text2TextZeroShotClassifier, ZeroShotClassifier)
 from transformers import AutoConfig
 
 
@@ -148,15 +143,22 @@ def run_config(config: Config) -> None:
 
     print("Loading data")
     data = load_data(config["paths"]["in_file"])
+    data = data.dropna(subset=[x_column, y_column])
     data = data.reset_index()
 
-    print("Preparing training data")
-    train_indices = find_example_indices(
-        data,
-        y_column,
-        config["inference"]["n_examples"],
-        seed=config["system"]["seed"],
-    )
+    try:
+        examples_path = config["paths"]["examples"]
+        examples = pd.read_csv(examples_path)
+        example_ids = examples["id"]
+        train_indices = data[data["id"].isin(example_ids)]
+    except KeyError:
+        print("Preparing training data")
+        train_indices = find_example_indices(
+            data,
+            y_column,
+            config["inference"]["n_examples"],
+            seed=config["system"]["seed"],
+        )
     data["train_test_set"] = "test"
 
     if task == "few-shot":
