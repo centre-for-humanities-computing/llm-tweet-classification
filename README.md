@@ -1,7 +1,7 @@
 # llm-tweet-classification
 Classifying tweets with large language models with zero- and few-shot learning with custom and generic prompts, as well as supervised learning algorithms for comparison.
 
-#### Our results on annotating tweets with labels `exemplar` and `political`:
+### Our results on annotating tweets with labels `exemplar` and `political`:
 
 | F1-scores | Accuracies | Precision-Recall |
 |:---------:|:----------:|:----------------:|
