@@ -149,8 +149,9 @@ def run_config(config: Config) -> None:
     try:
         examples_path = config["paths"]["examples"]
         examples = pd.read_csv(examples_path)
-        X_train = examples["data"]
-        y_train = examples["label"]
+        examples = examples.dropna(subset=y_column)
+        X_train = examples[x_column]
+        y_train = examples[y_column]
         train_indices = []
     except KeyError:
         print("Preparing training data")

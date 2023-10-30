@@ -59,7 +59,7 @@ prompt_file="custom_prompt.txt"
 
 If you want to use hand-selected examples for few-shot learning, pass along a subset of the original data int the paths section of
 the config.
-Examples have to have a `data` and a `label` column.
+Examples have to be in the same format as the data.
 
  ```
 [paths]
