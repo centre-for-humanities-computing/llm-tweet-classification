@@ -57,6 +57,18 @@ out_dir="predictions/"
 prompt_file="custom_prompt.txt"
  ```
 
+If you want to use hand-selected examples for few-shot learning, pass along a subset of the original data int the paths section of
+the config.
+Examples have to contain an "id", that corresponds with an entry in the original dataset.
+
+ ```
+[paths]
+in_file="labelled_data.csv"
+out_dir="predictions/"
+examples="examples.csv"
+ ```
+
+
 You can run the CLI like this:
 
 ```bash
