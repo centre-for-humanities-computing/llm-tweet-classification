@@ -3,9 +3,9 @@ Classifying tweets with large language models with zero- and few-shot learning w
 
 ### Our results on annotating tweets with labels `exemplar` and `political`:
 
-| F1-scores | Accuracies | Precision-Recall |
-|:---------:|:----------:|:----------------:|
-| ![F1 scores](figures/f1_figure.png) | ![Acc scores](figures/acc_figure.png) | ![prec-rec scores](figures/prec_rec_figure.png) |
+| F1-scores & Accuracies | Precision-Recall |
+|:---------:|:----------------:|
+| ![F1 scores](figures/f1_acc_figure.png) | ![prec-rec scores](figures/prec_rec.png) |
 
 ## Getting Started
 
