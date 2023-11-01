@@ -5,7 +5,7 @@ Classifying tweets with large language models with zero- and few-shot learning w
 
 | F1-scores & Accuracies | Precision-Recall |
 |:---------:|:----------------:|
-| ![F1 scores](figures/f1_acc_figure.png) | ![prec-rec scores](figures/prec_rec.png) |
+| ![F1 scores](figures/f1_acc.png) | ![prec-rec scores](figures/prec_rec.png) |
 
 ## Getting Started
 
