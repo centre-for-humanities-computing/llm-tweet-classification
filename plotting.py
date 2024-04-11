@@ -217,8 +217,8 @@ def main():
 
     f1_acc_fig = combine_figs(acc_figure, f1_figure)
 
-    f1_acc_fig.savefig(f"{out_path}f1_acc_figure_updated.png", dpi=300)
-    prec_rec_figure.save(f"{out_path}prec_rec_figure_updated.png", dpi=300)
+    f1_acc_fig.savefig(f"{out_path}f1_acc_figure.png", dpi=300)
+    prec_rec_figure.save(f"{out_path}prec_rec_figure.png", dpi=300)
 
 
 if __name__ == "__main__":
