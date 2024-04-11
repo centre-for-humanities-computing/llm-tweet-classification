@@ -14,7 +14,7 @@ Install all requirements for the LLM classification script.
 pip install -r requirements.txt
 ```
 
-**NB:** This will only install a minimal set of requirements to create figures for reproducability sake with the code [below](##-plotting-results). A more complete requirements file for running the full pipeline can be found in [configs](configs/requirements.txt).
+**NB:** This will only install a minimal set of requirements to create figures for reproducability sake with the code [below](#plotting_results). A more complete requirements file for running the full pipeline can be found in [configs](configs/requirements.txt).
 
 ## Inference
 The repo contains a CLI script `llm_classification.py`.
@@ -148,6 +148,7 @@ It will output two files to the specified out folder:
 - a txt file with the classification report for the test data for each of the files in the --in_dir folder. 
 - a csv file with the same information as the txt file, but which can be used for plotting the results. 
 
+<a name="plotting_results"></a>
 ## Plotting results
 The `plotting.py` script takes the csv-file produced by the evaluation script and makes three plots:
 - acc_figure.png: The accuracy for each of the 8 models on each outcome (political, exemplar) in each task (zero-shot, few-shot) with each prompt type (generic, custom). It's split into four quadrants, with the left side being the exemplar column, the right being political, the upper line being custom prompts and the lower column being generic prompts. 
