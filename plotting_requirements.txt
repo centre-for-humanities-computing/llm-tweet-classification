@@ -1,0 +1,4 @@
+pandas==1.5.0
+plotnine==0.12.2
+seaborn==0.12.2
+patchworklib==0.6.2

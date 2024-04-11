@@ -1,0 +1,16 @@
+pandas>=1.5.0
+numpy>=1.23.5
+plotnine==0.12.2
+scikit-learn>=1.2.0
+seaborn>=0.12.2
+stormtrooper>=0.3.2
+torch>=2.0.0
+confection>=0.1.0
+transformers>=4.25.0
+setfit>=0.7.0
+xformers==0.0.21
+embetter==0.5.2
+gensim==4.3.1
+accelerate==0.23.0
+psutil==5.9.5
+patchworklib>=0.6.2

@@ -14,6 +14,8 @@ Install all requirements for the LLM classification script.
 pip install -r requirements.txt
 ```
 
+*NB:* This will only install a minimal set of requirements to create figures for reproducability sake with the code [below](##plotting-results). A more complete requirements file for running the full pipeline can be found in [configs](configs/requirements.txt).
+
 ## Inference
 The repo contains a CLI script `llm_classification.py`.
 You can use it for running arbitrary classification tasks in `.tsv` or `.csv` files with Large Language models from either
