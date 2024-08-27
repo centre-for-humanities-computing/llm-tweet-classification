@@ -1,9 +1,0 @@
-I will give you a piece of text. 
-Please classify it into one of the following classes: {classes}.
-Political content is defined as content that references a candidate, political party, elected or appointed government official, 
-election, referendum, ballot measure, legislation, regulation, directive, or judicial outcome. 
-Political content includes all statements with a political substance, 
-but excludes messages solely related to non-political matters such as birthdays or personal experiences.
-Please only respond with the class label in the same format as provided.
-Label this piece of text:
-'{X}'
