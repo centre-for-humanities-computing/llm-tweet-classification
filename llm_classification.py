@@ -7,12 +7,7 @@ from typing import Any, Literal, Optional
 import pandas as pd
 from confection import Config
 from sklearn.base import ClassifierMixin
-from stormtrooper import (GenerativeFewShotClassifier,
-                          GenerativeZeroShotClassifier,
-                          OpenAIFewShotClassifier, OpenAIZeroShotClassifier,
-                          SetFitFewShotClassifier, SetFitZeroShotClassifier,
-                          Text2TextFewShotClassifier,
-                          Text2TextZeroShotClassifier, ZeroShotClassifier)
+from stormtrooper import Trooper
 from transformers import AutoConfig
 
 
@@ -146,23 +141,28 @@ def run_config(config: Config) -> None:
     data = data.dropna(subset=[x_column, y_column])
     data = data.reset_index()
 
-    try:
-        examples_path = config["paths"]["examples"]
-        examples = pd.read_csv(examples_path)
-        examples = examples.dropna(subset=y_column)
-        X_train = examples[x_column]
-        y_train = examples[y_column]
-        train_indices = []
-    except KeyError:
-        print("Preparing training data")
-        train_indices = find_example_indices(
-            data,
-            y_column,
-            config["inference"]["n_examples"],
-            seed=config["system"]["seed"],
-        )
-        X_train = data[x_column][train_indices]
-        y_train = data[y_column][train_indices]
+    if task == "zero-shot":
+        X_train = None
+        y_train = pd.unique(data[y_column])
+
+    if task == "few-shot":
+        try:
+            examples_path = config["paths"]["examples"]
+            examples = pd.read_csv(examples_path)
+            examples = examples.dropna(subset=y_column)
+            X_train = examples[x_column]
+            y_train = examples[y_column]
+            train_indices = []
+        except KeyError:
+            print("Preparing training data")
+            train_indices = find_example_indices(
+                data,
+                y_column,
+                config["inference"]["n_examples"],
+                seed=config["system"]["seed"],
+            )
+            X_train = data[x_column][train_indices]
+            y_train = data[y_column][train_indices]
 
     data["train_test_set"] = "test"
 
@@ -170,13 +170,10 @@ def run_config(config: Config) -> None:
         data["train_test_set"][train_indices] = "train"
 
     print("Loading model")
-    classifier = prepare_model(
-        model_name,
-        task,
-        device=config["system"]["device"],
-        custom_prompt=custom_prompt,
-    )
+    classifier = Trooper(model_name, prompt=custom_prompt, fuzzy_match=True)
 
+    print(X_train, y_train)
+    
     print("Fitting model")
     classifier.fit(X_train, y_train)
 
