@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14916576.svg)](https://doi.org/10.5281/zenodo.14916576)
+
 # llm-tweet-classification
 Classifying tweets with large language models with zero- and few-shot learning with custom and generic prompts, as well as supervised learning algorithms for comparison.
 
